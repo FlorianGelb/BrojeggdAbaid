@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
-from Save_Dialog import *
+import csv
 
 class Ui_Main_Menu(object):
     def setupUi(self, Main_Menu):
@@ -190,7 +190,6 @@ class Ui_Main_Menu(object):
         name = QFileDialog.getSaveFileName()
         name = name[0]
 
-
         with open("{}.csv".format(name), "w+", newline="") as save_file:
             save_writer = csv.writer(save_file)
             save_writer.writerow(["N", "V", "T", "p"])
@@ -198,10 +197,11 @@ class Ui_Main_Menu(object):
                                   str(self.lineEdit_p.text())])
 
     def load_Settings(self):
-
         row_array = []
+        name = QFileDialog.getOpenFileName()
+        name = name[0]
         try:
-            with open("Einstellungen.csv", "r", newline="") as load_file:
+            with open("{}.csv".format(name), "r", newline="") as load_file:
                 load_reader = csv.reader(load_file)
                 for row in load_reader:
                     row_array.append(row)
