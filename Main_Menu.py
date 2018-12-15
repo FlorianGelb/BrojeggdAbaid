@@ -7,8 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox
-import csv
+from PyQt5.QtWidgets import QMessageBox, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from Save_Dialog import *
 
 class Ui_Main_Menu(object):
     def setupUi(self, Main_Menu):
@@ -173,7 +173,6 @@ class Ui_Main_Menu(object):
 
         self.actionSpeichern.triggered.connect(lambda: self.save_Settings())
 
-
         self.action_ffnen.triggered.connect(lambda: self.load_Settings())
 
     def update_UI(self,slider,lineEdit, value_text):
@@ -188,10 +187,15 @@ class Ui_Main_Menu(object):
         button.clicked.connect(lambda: print("clicked"))
 
     def save_Settings(self):
-        with open("Einstellungen.csv", "w+", newline="") as save_file:
+        name = QFileDialog.getSaveFileName()
+        name = name[0]
+
+
+        with open("{}.csv".format(name), "w+", newline="") as save_file:
             save_writer = csv.writer(save_file)
             save_writer.writerow(["N", "V", "T", "p"])
-            save_writer.writerow([str(self.lineEdit_N.text()), str(self.lineEdit_V.text()), str(self.lineEdit_T.text()), str(self.lineEdit_p.text())])
+            save_writer.writerow([str(self.lineEdit_N.text()), str(self.lineEdit_V.text()), str(self.lineEdit_T.text()),
+                                  str(self.lineEdit_p.text())])
 
     def load_Settings(self):
 
@@ -208,7 +212,6 @@ class Ui_Main_Menu(object):
         self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(row_array[1][1]))
         self.update_UI(self.horizontalSlider_T, self.lineEdit_T, str(row_array[1][2]))
         self.update_UI(self.horizontalSlider_V, self.lineEdit_V, str(row_array[1][3]))
-
 
 if __name__ == "__main__":
     import sys
