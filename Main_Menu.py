@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import csv
 
 class Ui_Main_Menu(object):
     def setupUi(self, Main_Menu):
@@ -15,7 +16,7 @@ class Ui_Main_Menu(object):
         Main_Menu.setMinimumSize(QtCore.QSize(464, 261))
         Main_Menu.setMaximumSize(QtCore.QSize(464, 261))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("Icons/Main_Icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("Main_Menue_UI_UI\Icons\Main_Icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Main_Menu.setWindowIcon(icon)
         Main_Menu.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(Main_Menu)
@@ -140,6 +141,7 @@ class Ui_Main_Menu(object):
         QtCore.QMetaObject.connectSlotsByName(Main_Menu)
 
     def retranslateUi(self, Main_Menu):
+        self.row_array =[]
         _translate = QtCore.QCoreApplication.translate
         Main_Menu.setWindowTitle(_translate("Main_Menu", "Gas-Simulator"))
         self.lineEdit_N.setText(_translate("Main_Menu", "100"))
@@ -161,6 +163,48 @@ class Ui_Main_Menu(object):
         self.actionSpeichern.setText(_translate("Main_Menu", "Speichern"))
         self.action_ffnen.setText(_translate("Main_Menu", "Öffnen"))
         self.actionEinstellungen.setText(_translate("Main_Menu", "Einstellungen"))
+
+        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, None)
+        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, None)
+        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, None)
+        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, None)
+
+        self.update_Button(self.pushButton_Start)
+
+        self.actionSpeichern.triggered.connect(lambda: self.save_Settings())
+
+
+        self.action_ffnen.triggered.connect(lambda: self.load_Settings())
+
+    def update_UI(self,slider,lineEdit, value_text):
+            if   type(value_text) != type(None):
+               slider.setValue(int(value_text))
+            elif type(value_text) == type(None):
+                lineEdit.textChanged.connect(lambda: slider.setValue(int(lineEdit.text())))
+                slider.valueChanged.connect(lambda: lineEdit.setText(str(slider.value())))
+
+    def update_Button(self, button):
+        button.clicked.connect(lambda: print("clicked"))
+
+    def save_Settings(self):
+        with open("Einstellungen.csv", "w+", newline="") as save_file:
+            save_writer = csv.writer(save_file)
+            save_writer.writerow(["N", "V", "T", "p"])
+            save_writer.writerow([str(self.lineEdit_N.text()), str(self.lineEdit_V.text()), str(self.lineEdit_T.text()), str(self.lineEdit_p.text())])
+
+    def load_Settings(self):
+        try:
+            with open("Einstellungen.csv", "r", newline="") as load_file:
+                load_reader = csv.reader(load_file)
+                for row in load_reader:
+                    self.row_array.append(row)
+        except Exception as e:
+            print(e)
+
+        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, str(self.row_array[1][0]))
+        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(self.row_array[1][1]))
+        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, str(self.row_array[1][2]))
+        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, str(self.row_array[1][3]))
 
 
 if __name__ == "__main__":
