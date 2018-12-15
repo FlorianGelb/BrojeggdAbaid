@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Main_Menu</class>
+ <widget class="QMainWindow" name="Main_Menu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>464</width>
+    <height>261</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>464</width>
+    <height>261</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>464</width>
+    <height>261</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Gas-Simulator</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Icons/Main_Icon.png</normaloff>Icons/Main_Icon.png</iconset>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_N">
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_N">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_N">
+       <property name="text">
+        <string>100</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_N">
+       <property name="text">
+        <string>Anzahl der Teilchen</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_V">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_V">
+       <property name="text">
+        <string>Volumen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_V">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_V">
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_V_Einheit">
+       <property name="text">
+        <string>Kubikmeter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>20</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_T">
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBox_T">
+       <item>
+        <property name="text">
+         <string>K</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>°C</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_T">
+       <property name="text">
+        <string>293</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_T">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_T">
+       <property name="text">
+        <string>Temperatur</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>120</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_p">
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBox_p">
+       <item>
+        <property name="text">
+         <string>hPa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>kPa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>bar</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QSlider" name="horizontalSlider_p">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_p">
+       <property name="text">
+        <string>Druck</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_p">
+       <property name="text">
+        <string>293</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Start">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>170</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>gridLayoutWidget_2</zorder>
+   <zorder>gridLayoutWidget_3</zorder>
+   <zorder>label_T</zorder>
+   <zorder>gridLayoutWidget_4</zorder>
+   <zorder>pushButton_Start</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>464</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionSpeichern"/>
+    <addaction name="action_ffnen"/>
+    <addaction name="actionEinstellungen"/>
+   </widget>
+   <addaction name="menuDatei"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+  </action>
+  <action name="action_ffnen">
+   <property name="text">
+    <string>Öffnen</string>
+   </property>
+  </action>
+  <action name="actionEinstellungen">
+   <property name="text">
+    <string>Einstellungen</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

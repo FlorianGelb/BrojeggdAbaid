@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import csv
 
 class Ui_Main_Menu(object):
@@ -141,7 +142,6 @@ class Ui_Main_Menu(object):
         QtCore.QMetaObject.connectSlotsByName(Main_Menu)
 
     def retranslateUi(self, Main_Menu):
-        self.row_array =[]
         _translate = QtCore.QCoreApplication.translate
         Main_Menu.setWindowTitle(_translate("Main_Menu", "Gas-Simulator"))
         self.lineEdit_N.setText(_translate("Main_Menu", "100"))
@@ -183,6 +183,7 @@ class Ui_Main_Menu(object):
                 lineEdit.textChanged.connect(lambda: slider.setValue(int(lineEdit.text())))
                 slider.valueChanged.connect(lambda: lineEdit.setText(str(slider.value())))
 
+
     def update_Button(self, button):
         button.clicked.connect(lambda: print("clicked"))
 
@@ -193,18 +194,20 @@ class Ui_Main_Menu(object):
             save_writer.writerow([str(self.lineEdit_N.text()), str(self.lineEdit_V.text()), str(self.lineEdit_T.text()), str(self.lineEdit_p.text())])
 
     def load_Settings(self):
+
+        row_array = []
         try:
             with open("Einstellungen.csv", "r", newline="") as load_file:
                 load_reader = csv.reader(load_file)
                 for row in load_reader:
-                    self.row_array.append(row)
+                    row_array.append(row)
         except Exception as e:
-            print(e)
+            return 0
 
-        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, str(self.row_array[1][0]))
-        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(self.row_array[1][1]))
-        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, str(self.row_array[1][2]))
-        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, str(self.row_array[1][3]))
+        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, str(row_array[1][0]))
+        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(row_array[1][1]))
+        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, str(row_array[1][2]))
+        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, str(row_array[1][3]))
 
 
 if __name__ == "__main__":
