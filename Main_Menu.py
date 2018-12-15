@@ -132,11 +132,20 @@ class Ui_Main_Menu(object):
         self.action_ffnen = QtWidgets.QAction(Main_Menu)
         self.action_ffnen.setObjectName("action_ffnen")
         self.actionEinstellungen = QtWidgets.QAction(Main_Menu)
-        self.actionEinstellungen.setObjectName("actionEinstellungen")
         self.menuDatei.addAction(self.actionSpeichern)
         self.menuDatei.addAction(self.action_ffnen)
-        self.menuDatei.addAction(self.actionEinstellungen)
         self.menubar.addAction(self.menuDatei.menuAction())
+
+        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, None)
+        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, None)
+        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, None)
+        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, None)
+
+        self.update_Button(self.pushButton_Start)
+
+        self.actionSpeichern.triggered.connect(lambda: self.save_Settings())
+
+        self.action_ffnen.triggered.connect(lambda: self.load_Settings())
 
         self.retranslateUi(Main_Menu)
         QtCore.QMetaObject.connectSlotsByName(Main_Menu)
@@ -162,20 +171,11 @@ class Ui_Main_Menu(object):
         self.menuDatei.setTitle(_translate("Main_Menu", "Datei"))
         self.actionSpeichern.setText(_translate("Main_Menu", "Speichern"))
         self.action_ffnen.setText(_translate("Main_Menu", "Öffnen"))
-        self.actionEinstellungen.setText(_translate("Main_Menu", "Einstellungen"))
 
-        self.update_UI(self.horizontalSlider_N, self.lineEdit_N, None)
-        self.update_UI(self.horizontalSlider_p, self.lineEdit_p, None)
-        self.update_UI(self.horizontalSlider_T, self.lineEdit_T, None)
-        self.update_UI(self.horizontalSlider_V, self.lineEdit_V, None)
 
-        self.update_Button(self.pushButton_Start)
-
-        self.actionSpeichern.triggered.connect(lambda: self.save_Settings())
-
-        self.action_ffnen.triggered.connect(lambda: self.load_Settings())
 
     def update_UI(self,slider,lineEdit, value_text):
+
             if   type(value_text) != type(None):
                slider.setValue(int(value_text))
             elif type(value_text) == type(None):
