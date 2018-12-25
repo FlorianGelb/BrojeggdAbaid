@@ -19,15 +19,8 @@ public class Ball extends Circle implements HarterKoerper {
 	double m = 1;
 	Color c = Color.BLUE;
 
-	/**
-	 * Konstruktor der Ballklasse.
-	 *
-	 * @param bx     x-Koordinate des Startpunktes.
-	 * @param by     y-Koordinate des Startpunktes.
-	 * @param radius Radius des Balls.
-	 * @param col    Farbe des Balls.
-	 */
-	public Ball(double bx, double by, double radius, Color col) {
+	public Ball(double bx, double by, double radius, Color col)
+	{
 		super(bx, by, radius);
 		x = bx;
 		y = by;
@@ -37,34 +30,20 @@ public class Ball extends Circle implements HarterKoerper {
 		ballAnzahl++;
 
 	}
-
-	/**
-	 * Setzt die Farbe des Balls.
-	 *
-	 * @param farbe
-	 */
-	public void setColor(Color farbe) {
+	public void setColor(Color farbe)
+	{
 		c = farbe;
 		setFill(farbe);
 	}
-
-	/**
-	 * Aktualisiert die Ballposition entsprechend der Geschwindigkeitsattribute.
-	 */
-	public void updatePosition() {
-
+	public void updatePosition()
+	{
 		x = x + vx;
 		y = y + vy;
 
 		relocate(x, y);
 	}
-
-	/**
-	 * Diese Methode wird vom Simulationstimer immer wieder aufgerufen.
-	 *
-	 *
-	 */
-	public boolean collideWith(HarterKoerper h) {
+	public boolean collideWith(HarterKoerper h)
+	{
 		if (h.getClass() == Ball.class) {
 			Ball b = (Ball) h;
 			if (((this.x - b.x) * (this.x - b.x) + (this.y - b.y) * (this.y - b.y)) < (this.radius + b.radius) * (this.radius + b.radius)) {
@@ -74,5 +53,4 @@ public class Ball extends Circle implements HarterKoerper {
 		}
 		return false;
 	}
-
 }

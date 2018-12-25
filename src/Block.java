@@ -12,12 +12,6 @@ public class Block extends Rectangle implements HarterKoerper
 
     private Color c = Color.RED;
 
-    private double cx1 = 0;
-    private double cx2 = 0;
-
-    private double cy1 = 0;
-    private double cy2 = 0;
-
     public Block(float x, float y, float width, float hight, Color c)
     {
         super(x,y, width, hight);
@@ -30,17 +24,13 @@ public class Block extends Rectangle implements HarterKoerper
         this.width = width;
 
         this.c = c;
-
-
-
     }
 
     @Override
-    public boolean collideWith(HarterKoerper h) {
-
+    public boolean collideWith(HarterKoerper h)
+    {
         if (h.getClass() == Ball.class)
         {
-
             Ball b = (Ball) h;
 
             if (((b.x >= this.x) && (b.x <= (this.x + this.width))) && ((this.y - b.y) <= b.radius))
@@ -54,17 +44,14 @@ public class Block extends Rectangle implements HarterKoerper
                 System.out.println("2");
                 b.vy = -b.vy;
                 b.vx = -b.vx;
-
             }
             if ((((b.y + b.radius > this.y) && (b.y + b.radius  < (this.y + this.hight))) && b.x + b.radius < this.x + this.width) &&  ((this.x - b.x) <= b.radius))
             {
                 System.out.println("3");
                 b.vy = -b.vy;
                 b.vx = -b.vx;
-
             }
             }
         return false;
     }
-
 }
