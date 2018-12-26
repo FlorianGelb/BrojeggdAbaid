@@ -1,6 +1,6 @@
 import javafx.scene.control.Slider;
 
-public class CreateSlider extends javafx.scene.control.Slider
+public class CreateSlider extends Slider
 {
     Slider slider = new Slider();
 
@@ -14,11 +14,17 @@ public class CreateSlider extends javafx.scene.control.Slider
         slider.setShowTickMarks(tckMarks);
         slider.setMajorTickUnit(tckUnit);
         slider.setBlockIncrement(incrementStep);
+
     }
 
     public Slider createSlider ()
     {
         return  slider;
+    }
+
+    public double returnValue()
+    {
+        return slider.getValue();
     }
 
 
