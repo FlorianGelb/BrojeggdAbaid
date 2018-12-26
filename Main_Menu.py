@@ -144,8 +144,9 @@ class Ui_Main_Menu(object):
         self.update_Button(self.pushButton_Start)
 
         self.actionSpeichern.triggered.connect(lambda: self.save_Settings())
-
         self.action_ffnen.triggered.connect(lambda: self.load_Settings())
+
+        self.comboBox_p.currentIndexChanged.connect(lambda: self.pressure_Conversion())
 
         self.retranslateUi(Main_Menu)
         QtCore.QMetaObject.connectSlotsByName(Main_Menu)
@@ -172,7 +173,14 @@ class Ui_Main_Menu(object):
         self.actionSpeichern.setText(_translate("Main_Menu", "Speichern"))
         self.action_ffnen.setText(_translate("Main_Menu", "Öffnen"))
 
+    def pressure_Conversion(self):
+        if self.comboBox_p.currentIndex() == 1:
+            content = str(self.lineEdit_p.text()) + " E-1"
+            self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(content))
 
+
+    def update_ComboBox(self,box, value):
+        box.setCurrentIndex(value)
 
     def update_UI(self,slider,lineEdit, value_text):
 
@@ -192,16 +200,16 @@ class Ui_Main_Menu(object):
 
         with open("{}.csv".format(name), "w+", newline="") as save_file:
             save_writer = csv.writer(save_file)
-            save_writer.writerow(["N", "V", "T", "p"])
+            save_writer.writerow(["N", "V", "T", "p", "[T]", "[p]"])
             save_writer.writerow([str(self.lineEdit_N.text()), str(self.lineEdit_V.text()), str(self.lineEdit_T.text()),
-                                  str(self.lineEdit_p.text())])
+                                  str(self.lineEdit_p.text()), str(self.comboBox_T.currentIndex()), str(self.comboBox_p.currentIndex())])
 
     def load_Settings(self):
         row_array = []
         name = QFileDialog.getOpenFileName()
         name = name[0]
         try:
-            with open("{}.csv".format(name), "r", newline="") as load_file:
+            with open("{}".format(name), "r", newline="") as load_file:
                 load_reader = csv.reader(load_file)
                 for row in load_reader:
                     row_array.append(row)
@@ -212,6 +220,8 @@ class Ui_Main_Menu(object):
         self.update_UI(self.horizontalSlider_p, self.lineEdit_p, str(row_array[1][1]))
         self.update_UI(self.horizontalSlider_T, self.lineEdit_T, str(row_array[1][2]))
         self.update_UI(self.horizontalSlider_V, self.lineEdit_V, str(row_array[1][3]))
+        self.update_ComboBox(self.comboBox_T, int(row_array[1][4]))
+        self.update_ComboBox(self.comboBox_p, int(row_array[1][5]))
 
 if __name__ == "__main__":
     import sys
