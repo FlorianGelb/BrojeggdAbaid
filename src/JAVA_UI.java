@@ -1,11 +1,7 @@
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 
@@ -14,6 +10,9 @@ public class JAVA_UI extends  Application
 {
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
+
+    CreateSlider sliderVolumen = new CreateSlider((byte)0, (short)100, (short)1, true, true, (short)20, (short)1);
+    CreateSlider sliderTemperatur = new CreateSlider((byte)0, (short)473, (short)294, true, true, (short)50, (short)1);
 
     Scene scene = new Scene(borderPane, 600, 400);
 
@@ -26,14 +25,6 @@ public class JAVA_UI extends  Application
         borderPane.setBottom(createBottomPane());
         borderPane.setLeft(createSettingsPane());
 
-        for (int n = 0; n < borderPane.getChildren().size(); n++)
-        {
-            if (borderPane.getChildren().get(n) instanceof VBox);
-            {
-                System.out.print(borderPane.getChildren().get(n));
-
-            }
-        }
         stage.setTitle("My JavaFX Application");
         stage.setScene(scene);
         stage.show();
@@ -41,7 +32,7 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-
+        
     }
 
     public static void main(String[] args)
@@ -72,16 +63,12 @@ public class JAVA_UI extends  Application
     {
         final VBox vBox = new VBox(5);
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
-
-        Slider sliderVolumen = Slider((byte)0, (short)100, (short)1, true, true, (short)20, (short)1);
-        Slider sliderTemperatur = Slider((byte)0, (short)473, (short)294, true, true, (short)50, (short)1);
-
         vBox.getChildren().addAll(
                 new Text("Volumen [m^3]"),
-                sliderVolumen,
+                sliderVolumen.createSlider(),
                 new TextField(),
                 new Text("Temperatur [K]"),
-                sliderTemperatur,
+                sliderTemperatur.createSlider(),
                 new TextField()
                 );
 
