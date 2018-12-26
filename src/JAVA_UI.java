@@ -6,22 +6,23 @@ import javafx.stage.Stage;
 import javafx.scene.text.*;
 
 
-
 public class JAVA_UI extends  Application
 {
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    CreateSlider sliderVolumen = new CreateSlider((byte)0, (short)100, (short)1, true, true, (short)20, (short)1);
-    CreateSlider sliderTemperatur = new CreateSlider((byte)0, (short)473, (short)294, true, true, (short)50, (short)1);
-    CreateSlider sliderAnzahl = new CreateSlider((byte) 0, (short) 1000, (short) 100, true, true, (short) 100, (short) 10);
+    CreateSlider sliderVolumen = new CreateSlider(0, 100, 1, true, true, 20, 1, 1);
+    CreateSlider sliderTemperatur = new CreateSlider(0, 473, 294, true, true, 50, 1, 1);
+    CreateSlider sliderAnzahl = new CreateSlider( 0,  10000,  1000, true, true,  2000,  10,1);
 
     CreateTextField textFieldVolumen = new CreateTextField("" + sliderVolumen.returnValue());
     CreateTextField textFieldTemperatur = new CreateTextField("" + sliderTemperatur.returnValue());
-    CreateTextField textFieldAnzahl = new CreateTextField("" + sliderAnzahl.returnValue());
+    CreateTextField textFieldAnzahl = new CreateTextField("" +  sliderAnzahl.returnValue());
+
 
     Scene scene = new Scene(borderPane, 600, 400);
 
+    SimulationTimer simualtionLoop;
 
 
     public void start(Stage stage)
@@ -31,20 +32,25 @@ public class JAVA_UI extends  Application
         borderPane.setBottom(createBottomPane());
         borderPane.setLeft(createSettingsPane());
 
+
         stage.setTitle("Gassimmulator V1.0.26122018.0");
         stage.setScene(scene);
         stage.show();
+
+        startSimulation();
     }
 
     public void  startSimulation()
     {
-        SimulationTimer simualtionLoop = new SimulationTimer(this, 10);
+        simualtionLoop = new SimulationTimer(this, 10);
         simualtionLoop.start();
     }
 
     public void updateSimulation()
     {
-
+        textFieldAnzahl.update("" + sliderAnzahl.listener());
+        textFieldVolumen.update("" + sliderVolumen.listener());
+        textFieldTemperatur.update("" + sliderTemperatur.listener());
     }
 
     public static void main(String[] args)
@@ -84,6 +90,7 @@ public class JAVA_UI extends  Application
                 new Text("Temperatur [K]"),
                 sliderTemperatur.createSlider(),
                 textFieldTemperatur.createTextFeld(),
+                new Text("Anzahl der Teilchen"),
                 sliderAnzahl.createSlider(),
                 textFieldAnzahl.createTextFeld(),
                 new Button("Plot")

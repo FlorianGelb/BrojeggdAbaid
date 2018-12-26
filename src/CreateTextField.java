@@ -4,13 +4,9 @@ public class CreateTextField extends TextField
 {
     TextField textFeld;
 
-    public CreateTextField(String text)
-    {
-    textFeld = new TextField(text);
-    }
+    public CreateTextField(String text){textFeld = new TextField(text); }
+    public TextField createTextFeld() {return textFeld;}
+    public void update (String newText) {textFeld.setText(newText);}
 
-    public TextField createTextFeld()
-    {
-        return textFeld;
-    }
+
 }
