@@ -11,13 +11,9 @@ public class JAVA_UI extends  Application
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    CreateSlider sliderVolumen = new CreateSlider(0, 100, 1, true, true, 20, 1, 1);
-    CreateSlider sliderTemperatur = new CreateSlider(0, 473, 294, true, true, 50, 1, 1);
-    CreateSlider sliderAnzahl = new CreateSlider( 0,  10000,  1000, true, true,  2000,  10,1);
-
-    CreateTextField textFieldVolumen = new CreateTextField("" + sliderVolumen.returnValue());
-    CreateTextField textFieldTemperatur = new CreateTextField("" + sliderTemperatur.returnValue());
-    CreateTextField textFieldAnzahl = new CreateTextField("" +  sliderAnzahl.returnValue());
+    SliderTextElement Volumen = new SliderTextElement(0, 100, 1, true, true, 20, 1, 1, "1");
+    SliderTextElement Temperatur = new SliderTextElement(0, 473, 294, true, true, 50, 1, 1, "294");
+    SliderTextElement Anzahl = new SliderTextElement( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
 
 
     Scene scene = new Scene(borderPane, 600, 400);
@@ -48,9 +44,10 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-        textFieldAnzahl.update("" + sliderAnzahl.listener());
-        textFieldVolumen.update("" + sliderVolumen.listener());
-        textFieldTemperatur.update("" + sliderTemperatur.listener());
+        Volumen.update();
+        Temperatur.update();
+        Anzahl.update();
+
     }
 
     public static void main(String[] args)
@@ -85,14 +82,14 @@ public class JAVA_UI extends  Application
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
                 new Text("Volumen [m^3]"),
-                sliderVolumen.createSlider(),
-                textFieldVolumen.createTextFeld(),
+                Volumen.createSlider(),
+                Volumen.createTextFeld(),
                 new Text("Temperatur [K]"),
-                sliderTemperatur.createSlider(),
-                textFieldTemperatur.createTextFeld(),
+                Temperatur.createSlider(),
+                Temperatur.createTextFeld(),
                 new Text("Anzahl der Teilchen"),
-                sliderAnzahl.createSlider(),
-                textFieldAnzahl.createTextFeld(),
+                Anzahl.createSlider(),
+                Anzahl.createTextFeld(),
                 new Button("Plot")
                 );
         return vBox;
