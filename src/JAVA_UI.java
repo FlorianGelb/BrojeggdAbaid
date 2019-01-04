@@ -11,7 +11,7 @@ public class JAVA_UI extends  Application
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    SliderTextElement Volumen = new SliderTextElement(0, 100, 1, true, true, 20, 1, 1, "1");
+    SliderTextElement Volumen = new SliderTextElement(0, 100, 1, true, true, 1, 1, 1, "1");
     SliderTextElement Temperatur = new SliderTextElement(0, 473, 294, true, true, 50, 1, 1, "294");
     SliderTextElement Anzahl = new SliderTextElement( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
 
@@ -44,9 +44,13 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-        Volumen.update();
-        Temperatur.update();
-        Anzahl.update();
+
+        if (Volumen.returnText() != Volumen.textBuffer || Volumen.returnSlider() != Volumen.sliderBuffer)
+        {Volumen.update();}
+        if (Temperatur.returnText() != Temperatur.textBuffer || Temperatur.returnSlider() != Temperatur.sliderBuffer)
+        {Temperatur.update();}
+        if (Anzahl.returnText() != Anzahl.textBuffer || Anzahl.returnSlider() != Anzahl.sliderBuffer)
+        {Anzahl.update();}
 
     }
 
