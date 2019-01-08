@@ -8,13 +8,15 @@ import javafx.scene.text.*;
 
 public class JAVA_UI extends  Application
 {
+    boolean tick = false;
+
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
     UserInterfaceElemente Volumen = new UserInterfaceElemente(0, 100, 1, true, true, 1, 1, 1, "1");
     UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, "294");
     UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
-
+    UserInterfaceElemente Diagramm = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
 
     Scene scene = new Scene(borderPane, 600, 400);
 
@@ -44,12 +46,21 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-        if (Anzahl.returnButtonValue())
+        if (tick == false)
         {
-            borderPane.setRight(createSettingsPane());
-            Anzahl.clicked = false;
+            borderPane.setRight(createChartPane());
+            tick = !tick;
+            Anzahl.clicked = !Anzahl.clicked;
         }
-    }
+
+            else if (tick && Diagramm.returnButtonValue())
+            { borderPane.setRight(null);
+            tick = !tick;
+            Anzahl.clicked = !Anzahl.clicked;
+            }
+
+        }
+
 
     public static void main(String[] args)
     {
@@ -88,7 +99,7 @@ public class JAVA_UI extends  Application
                 Temperatur.createTextFeld(),
                 new Text("Anzahl der Teilchen"),
                 Anzahl.createTextFeld(),
-                Anzahl.createButton("Plot")
+                Diagramm.createButton("Plot")
                 );
         return vBox;
     }
@@ -98,7 +109,7 @@ public class JAVA_UI extends  Application
         final VBox vBox = new VBox(5);
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
-
+        Diagramm.createLineChart()
         );
         return vBox;
     }

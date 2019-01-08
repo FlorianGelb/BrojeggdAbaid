@@ -50,8 +50,9 @@ public class UserInterfaceElemente
     public void updateDiagramm(double x, double y)
     {
         XYChart.Series update = new XYChart.Series();
-        update.get
+        update.getData().add(new XYChart.Data(x,y));
     }
+
     public Button createButton(String text)
     {
         button.setText(text);
