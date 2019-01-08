@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
@@ -9,7 +10,7 @@ import javafx.scene.text.*;
 public class JAVA_UI extends  Application
 {
     boolean tick = false;
-
+    static String[] Args = new String[3];
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
@@ -35,6 +36,7 @@ public class JAVA_UI extends  Application
         stage.setTitle("Gassimmulator V1.0.26122018.0");
         stage.setScene(scene);
         stage.setMaximized(true);
+        stage.getIcons().add(new Image("Icons/Main_Icon.png"));
         stage.show();
 
         startSimulation();
@@ -64,6 +66,7 @@ public class JAVA_UI extends  Application
 
     public static void main(String[] args)
     {
+        Args = args;
         launch(args);
     }
 
