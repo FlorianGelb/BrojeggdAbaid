@@ -11,9 +11,9 @@ public class JAVA_UI extends  Application
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    SliderTextElement Volumen = new SliderTextElement(0, 100, 1, true, true, 1, 1, 1, "1");
-    SliderTextElement Temperatur = new SliderTextElement(0, 473, 294, true, true, 50, 1, 1, "294");
-    SliderTextElement Anzahl = new SliderTextElement( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
+    UserInterfaceElemente Volumen = new UserInterfaceElemente(0, 100, 1, true, true, 1, 1, 1, "1");
+    UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, "294");
+    UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
 
 
     Scene scene = new Scene(borderPane, 600, 400);
@@ -44,14 +44,11 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-
-        if (Volumen.returnText() != Volumen.textBuffer || Volumen.returnSlider() != Volumen.sliderBuffer)
-        {Volumen.update();}
-        if (Temperatur.returnText() != Temperatur.textBuffer || Temperatur.returnSlider() != Temperatur.sliderBuffer)
-        {Temperatur.update();}
-        if (Anzahl.returnText() != Anzahl.textBuffer || Anzahl.returnSlider() != Anzahl.sliderBuffer)
-        {Anzahl.update();}
-
+        if (Anzahl.returnButtonValue())
+        {
+            borderPane.setRight(createSettingsPane());
+            Anzahl.clicked = false;
+        }
     }
 
     public static void main(String[] args)
@@ -86,18 +83,23 @@ public class JAVA_UI extends  Application
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
                 new Text("Volumen [m^3]"),
-                Volumen.createSlider(),
                 Volumen.createTextFeld(),
                 new Text("Temperatur [K]"),
-                Temperatur.createSlider(),
                 Temperatur.createTextFeld(),
                 new Text("Anzahl der Teilchen"),
-                Anzahl.createSlider(),
                 Anzahl.createTextFeld(),
-                new Button("Plot")
+                Anzahl.createButton("Plot")
                 );
         return vBox;
     }
 
+    public Pane createChartPane()
+    {
+        final VBox vBox = new VBox(5);
+        vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
+        vBox.getChildren().addAll(
 
+        );
+        return vBox;
+    }
 }

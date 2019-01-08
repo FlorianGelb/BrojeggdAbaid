@@ -1,19 +1,30 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import java.text.NumberFormat;
+import javafx.scene.control.Button;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 
-public class SliderTextElement
+
+public class UserInterfaceElemente
 {
     Slider slider = new Slider();
     Number newVal;
     TextField textFeld;
+    Button button = new Button();
 
     String textBuffer;
     double sliderBuffer;
 
-    int a;
+    boolean clicked = false;
+    NumberAxis xAchse = new NumberAxis();
+    NumberAxis yAchse = new NumberAxis();
+    final LineChart<Number, Number> Diagramm = new LineChart<Number, Number>(xAchse, yAchse);
 
-    public SliderTextElement (int valMin, int valMax, int valDef, boolean tckLabels, boolean tckMarks, double tckUnit, double incrementStep, int tckCount, String text)
+    public UserInterfaceElemente(int valMin, int valMax, int valDef, boolean tckLabels, boolean tckMarks, double tckUnit, double incrementStep, int tckCount, String text)
     {
         slider.setMin(valMin);
         slider.setMax(valMax);
@@ -30,10 +41,35 @@ public class SliderTextElement
 
         textBuffer = textFeld.getText();
         sliderBuffer = slider.getValue();
-        a = valMax;
+    }
+    public LineChart createLineChart()
+    {
+        return Diagramm;
     }
 
-    public Slider createSlider (){return slider;}
+    public void updateDiagramm(double x, double y)
+    {
+        XYChart.Series update = new XYChart.Series();
+        update.get
+    }
+    public Button createButton(String text)
+    {
+        button.setText(text);
+        return button;
+    }
+
+    public boolean returnButtonValue()
+    {
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            clicked = true;
+            }
+        });
+        return clicked;
+    }
+
+    public void updateTextfeld (String newString){textFeld.setText(newString);}
 
     public TextField createTextFeld() {return textFeld;}
 
@@ -41,7 +77,6 @@ public class SliderTextElement
         if (this.sliderBuffer != (slider.getValue()) || this.textBuffer.equals(textFeld.getText()) == false ){
             try {
                 textFeld.textProperty().bindBidirectional(slider.valueProperty(), NumberFormat.getNumberInstance());
-                //textFeld.positionCaret(this.getCursor());
                 this.sliderBuffer = slider.getValue();
                 this.textBuffer = textFeld.getText();
             } catch (Throwable e) {
@@ -50,6 +85,7 @@ public class SliderTextElement
             }
         }
     }
+
     public int getCursor()
     {
         String[] list = textFeld.getText().split("");
