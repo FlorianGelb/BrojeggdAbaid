@@ -25,12 +25,12 @@ import java.util.Random;
 public class MyJfxApp extends Application
 {
 	Group root = new Group();
-	int Anzahl = 500;
+	int Anzahl = 10000;
 	SimulationTimer simulationLoop;
 	Ball[] b = new Ball[Anzahl];
 	Block[] blocke = new Block[1];
 	Random zufall = new Random();
-	double rad = 10.0;
+	double rad = 5.0;
 	final BorderPane borderPane = new BorderPane();
 	Scene scene = new Scene(root, 600, 400);
 
