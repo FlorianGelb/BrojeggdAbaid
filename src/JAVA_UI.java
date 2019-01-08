@@ -34,6 +34,7 @@ public class JAVA_UI extends  Application
 
         stage.setTitle("Gassimmulator V1.0.26122018.0");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
 
         startSimulation();
@@ -52,6 +53,7 @@ public class JAVA_UI extends  Application
             borderPane.setRight(createChartPane());
             tick = !tick;
             Diagramm.clicked = false;
+
         }
             else if (tick && Diagramm.returnButtonValue())
             { borderPane.setRight(null);
