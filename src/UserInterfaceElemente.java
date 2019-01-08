@@ -101,5 +101,6 @@ public class UserInterfaceElemente
     }
     public String returnText(){return textFeld.getText();}
     public double returnSlider(){return slider.getValue();}
+    public Slider createSlider() {return slider;}
 }
 

@@ -17,6 +17,7 @@ public class JAVA_UI extends  Application
     UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, "294");
     UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
     UserInterfaceElemente Diagramm = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
+    UserInterfaceElemente Diagramm2 = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
 
     Scene scene = new Scene(borderPane, 600, 400);
 
@@ -46,21 +47,18 @@ public class JAVA_UI extends  Application
 
     public void updateSimulation()
     {
-        if (tick == false)
+        if (tick == false && Diagramm.returnButtonValue())
         {
             borderPane.setRight(createChartPane());
             tick = !tick;
-            Anzahl.clicked = !Anzahl.clicked;
+            Diagramm.clicked = false;
         }
-
             else if (tick && Diagramm.returnButtonValue())
             { borderPane.setRight(null);
             tick = !tick;
-            Anzahl.clicked = !Anzahl.clicked;
+            Diagramm.clicked = false;
             }
-
-        }
-
+    }
 
     public static void main(String[] args)
     {
@@ -109,7 +107,8 @@ public class JAVA_UI extends  Application
         final VBox vBox = new VBox(5);
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
-        Diagramm.createLineChart()
+        Diagramm.createLineChart(),
+                Diagramm2.createLineChart()
         );
         return vBox;
     }
