@@ -14,9 +14,9 @@ public class JAVA_UI extends  Application
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    UserInterfaceElemente Volumen = new UserInterfaceElemente(0, 100, 1, true, true, 1, 1, 1, "1");
-    UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, "294");
-    UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, "1000");
+    UserInterfaceElemente Volumen = new UserInterfaceElemente(0, 100, 1, true, true, 1, 1, 1, Args[0]);
+    UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, Args[1]);
+    UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, Args[2]);
     UserInterfaceElemente Diagramm = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
     UserInterfaceElemente Diagramm2 = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
 
@@ -33,7 +33,7 @@ public class JAVA_UI extends  Application
         borderPane.setLeft(createSettingsPane());
 
 
-        stage.setTitle("Gassimmulator V1.0.26122018.0");
+        stage.setTitle("Gassimmulator V1.1.0812019.0");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.getIcons().add(new Image("Icons/Main_Icon.png"));
