@@ -6,6 +6,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 
+
 public class JAVA_UI extends  Application
 {
     boolean tick = false;
@@ -55,11 +56,20 @@ public class JAVA_UI extends  Application
             tick = !tick;
             Diagramm.clicked = false;
 
+            for (int  i = 0; i < 140; i++)
+            {
+                Diagramm.updateDiagramm(Math.random() * 100,Math.random() * 1000, "1");
+                Diagramm2.updateDiagramm((i*2)*i, i, "1");
+
+            }
+
         }
             else if (tick && Diagramm.returnButtonValue())
             { borderPane.setRight(null);
             tick = !tick;
             Diagramm.clicked = false;
+            Diagramm.destroyDiagramm();
+            Diagramm2.destroyDiagramm();
             }
     }
 
@@ -124,11 +134,11 @@ public class JAVA_UI extends  Application
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
                 Diagramm.createLineChart(),
-                Diagramm.createSlider(0,100, 0,true, true, 5,1,1),
-                new Text("Zoom Diagramm 1"),
-                Diagramm2.createLineChart(),
-                Diagramm2.createSlider(0,100, 0,true, true, 5,1,1),
-                new Text ("Zoom Diagramm 2")
+              //  Diagramm.createSlider(0,100, 0,true, true, 5,1,1),
+                //new Text("Zoom Diagramm 1"),
+                Diagramm2.createLineChart()
+               // Diagramm2.createSlider(0,100, 0,true, true, 5,1,1),
+                //new Text ("Zoom Diagramm 2")
         );
         return vBox;
     }

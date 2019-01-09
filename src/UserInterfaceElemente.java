@@ -24,22 +24,29 @@ public class UserInterfaceElemente
     NumberAxis yAchse = new NumberAxis();
     final LineChart<Number, Number> Diagramm = new LineChart<Number, Number>(xAchse, yAchse);
 
+    XYChart.Series<Number, Number> update = new XYChart.Series<Number, Number>();
+
     public UserInterfaceElemente()
     {
 
-
-
-
     }
+
     public LineChart createLineChart()
     {
+        Diagramm.setAnimated(true);
         return Diagramm;
     }
 
-    public void updateDiagramm(double x, double y)
+    public void updateDiagramm(double x, double y, String Name)
     {
-        XYChart.Series update = new XYChart.Series();
-        update.getData().add(new XYChart.Data(x,y));
+        update.getData().add(new XYChart.Data<Number, Number>(x,y));
+        update.setName(Name);
+        Diagramm.getData().add(update);
+    }
+    public void destroyDiagramm()
+    {
+        update.getData().clear();
+        Diagramm.getData().clear();
     }
 
     public Button createButton(String text)
