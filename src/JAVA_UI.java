@@ -44,7 +44,7 @@ public class JAVA_UI extends  Application
 
     public void  startSimulation()
     {
-        simualtionLoop = new SimulationTimer(this, 10);
+        //simualtionLoop = new SimulationTimer(this, 10);
         simualtionLoop.start();
     }
 
