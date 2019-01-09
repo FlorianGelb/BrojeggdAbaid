@@ -9,6 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
 import csv
+import os
 
 class Ui_Main_Menu(object):
     def setupUi(self, Main_Menu):
@@ -109,7 +110,7 @@ class Ui_Main_Menu(object):
         self.lineEdit_p.setObjectName("lineEdit_p")
         self.gridLayout_p.addWidget(self.lineEdit_p, 2, 0, 1, 1)
         self.pushButton_Start = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_Start.setGeometry(QtCore.QRect(380, 170, 75, 23))
+        self.pushButton_Start.setGeometry(QtCore.QRect(380, 150, 75, 23))
         self.pushButton_Start.setObjectName("pushButton_Start")
         self.gridLayoutWidget.raise_()
         self.gridLayoutWidget_2.raise_()
@@ -184,8 +185,8 @@ class Ui_Main_Menu(object):
 
 
     def update_Button(self, button):
-        button.clicked.connect(lambda: print("clicked"))
-
+        button.clicked.connect(lambda: os.system("java -jar JFXGas.jar {};{};{}".format(self.lineEdit_N.text(), self.lineEdit_T.text(), self.lineEdit_V.text())))
+        print(self.lineEdit_N.text(), self.lineEdit_T.text(), self.lineEdit_V.text())
     def save_Settings(self):
         name = QFileDialog.getSaveFileName()
         name = name[0]

@@ -1,24 +1,23 @@
+import com.sun.org.apache.xpath.internal.Arg;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 
-
 public class JAVA_UI extends  Application
 {
     boolean tick = false;
-    static String[] Args = new String[3];
+    static String[] Args = new String[4];
     Pane root = new Pane();
     final BorderPane borderPane = new BorderPane();
 
-    UserInterfaceElemente Volumen = new UserInterfaceElemente(0, 100, 1, true, true, 1, 1, 1, Args[0]);
-    UserInterfaceElemente Temperatur = new UserInterfaceElemente(0, 473, 294, true, true, 50, 1, 1, Args[1]);
-    UserInterfaceElemente Anzahl = new UserInterfaceElemente( 0,  10000,  1000, true, true,  2000,  10,1, Args[2]);
-    UserInterfaceElemente Diagramm = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
-    UserInterfaceElemente Diagramm2 = new UserInterfaceElemente(0,0,0,false,false,0.1,0.0,0,"0");
+    UserInterfaceElemente Volumen = new UserInterfaceElemente();
+    UserInterfaceElemente Temperatur = new UserInterfaceElemente();
+    UserInterfaceElemente Anzahl = new UserInterfaceElemente();
+    UserInterfaceElemente Diagramm = new UserInterfaceElemente();
+    UserInterfaceElemente Diagramm2 = new UserInterfaceElemente();
 
     Scene scene = new Scene(borderPane, 600, 400);
 
@@ -36,7 +35,7 @@ public class JAVA_UI extends  Application
         stage.setTitle("Gassimmulator V1.1.0812019.0");
         stage.setScene(scene);
         stage.setMaximized(true);
-        stage.getIcons().add(new Image("Icons/Main_Icon.png"));
+        stage.getIcons().add(new Image("Main_Icon.png"));
         stage.show();
 
         startSimulation();
@@ -66,8 +65,20 @@ public class JAVA_UI extends  Application
 
     public static void main(String[] args)
     {
-        Args = args;
-        launch(args);
+        try {
+            for (int i = 0; i < 4; i++) {
+                String arg = args[0];
+                Args = arg.split(";");
+                launch(args);
+            }
+        }
+        catch(java.lang.ArrayIndexOutOfBoundsException e)
+            {
+                Args[0] = "1";
+                Args[1] = "294";
+                Args[2] = "1000";
+                launch(args);
+            }
     }
 
     public Pane createTopPane()
@@ -97,11 +108,11 @@ public class JAVA_UI extends  Application
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
                 new Text("Volumen [m^3]"),
-                Volumen.createTextFeld(),
+                Volumen.createTextFeld(Args[0]),
                 new Text("Temperatur [K]"),
-                Temperatur.createTextFeld(),
+                Temperatur.createTextFeld(Args[1]),
                 new Text("Anzahl der Teilchen"),
-                Anzahl.createTextFeld(),
+                Anzahl.createTextFeld(Args[2]),
                 Diagramm.createButton("Plot")
                 );
         return vBox;
@@ -112,8 +123,12 @@ public class JAVA_UI extends  Application
         final VBox vBox = new VBox(5);
         vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
         vBox.getChildren().addAll(
-        Diagramm.createLineChart(),
-                Diagramm2.createLineChart()
+                Diagramm.createLineChart(),
+                Diagramm.createSlider(0,100, 0,true, true, 5,1,1),
+                new Text("Zoom Diagramm 1"),
+                Diagramm2.createLineChart(),
+                Diagramm2.createSlider(0,100, 0,true, true, 5,1,1),
+                new Text ("Zoom Diagramm 2")
         );
         return vBox;
     }

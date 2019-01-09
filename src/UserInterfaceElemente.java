@@ -24,23 +24,12 @@ public class UserInterfaceElemente
     NumberAxis yAchse = new NumberAxis();
     final LineChart<Number, Number> Diagramm = new LineChart<Number, Number>(xAchse, yAchse);
 
-    public UserInterfaceElemente(int valMin, int valMax, int valDef, boolean tckLabels, boolean tckMarks, double tckUnit, double incrementStep, int tckCount, String text)
+    public UserInterfaceElemente()
     {
-        slider.setMin(valMin);
-        slider.setMax(valMax);
-        slider.setValue(valDef);
-        slider.setShowTickLabels(tckLabels);
-        slider.setShowTickMarks(tckMarks);
-        slider.setMajorTickUnit(tckUnit);
-        slider.setBlockIncrement(incrementStep);
-        slider.setMinorTickCount(tckCount);
-        slider.setSnapToTicks(true);
-        newVal = valDef;
 
-        textFeld = new TextField(text);
 
-        textBuffer = textFeld.getText();
-        sliderBuffer = slider.getValue();
+
+
     }
     public LineChart createLineChart()
     {
@@ -72,7 +61,10 @@ public class UserInterfaceElemente
 
     public void updateTextfeld (String newString){textFeld.setText(newString);}
 
-    public TextField createTextFeld() {return textFeld;}
+    public TextField createTextFeld(String text) {
+        textFeld = new TextField(text);
+        return textFeld;
+    }
 
     public void update () {
         if (this.sliderBuffer != (slider.getValue()) || this.textBuffer.equals(textFeld.getText()) == false ){
@@ -101,6 +93,22 @@ public class UserInterfaceElemente
     }
     public String returnText(){return textFeld.getText();}
     public double returnSlider(){return slider.getValue();}
-    public Slider createSlider() {return slider;}
+    public Slider createSlider(int valMin, int valMax, int valDef, boolean tckLabels, boolean tckMarks, double tckUnit, double incrementStep, int tckCount) {
+
+//        textBuffer = textFeld.getText();
+  //      sliderBuffer = slider.getValue();
+
+        slider.setMin(valMin);
+        slider.setMax(valMax);
+        slider.setValue(valDef);
+        slider.setShowTickLabels(tckLabels);
+        slider.setShowTickMarks(tckMarks);
+        slider.setMajorTickUnit(tckUnit);
+        slider.setBlockIncrement(incrementStep);
+        slider.setMinorTickCount(tckCount);
+        slider.setSnapToTicks(true);
+        newVal = valDef;
+
+        return slider;}
 }
 
