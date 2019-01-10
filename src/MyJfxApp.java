@@ -38,7 +38,8 @@ public class MyJfxApp extends Application
 	double speedSample;
 	int sec = 0;
 	double Speed = 0;
-
+	int druckCNT = 0;
+	double druck;
 	final BorderPane borderPane = new BorderPane();
 
 
@@ -96,7 +97,7 @@ public class MyJfxApp extends Application
 	private void startSimulation()
 	{
 		simulationLoop = new SimulationTimer(this, 1);
-		uiLoop = new UserInterfaceTimer(this, 250);
+		uiLoop = new UserInterfaceTimer(this, 1000);
 		simulationLoop.start();
 		uiLoop.start();
 
@@ -126,12 +127,18 @@ public class MyJfxApp extends Application
 	}
 	public void updateUI()
 	{
-			System.out.println(getSpeed());
-			temperatur = (getSpeed()*6.6 * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
-			if (sec%2 == 0) {
-				Temperatur.updateDiagramm(sec, temperatur , "Temperatur");
-			}
+			Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur");
+			Druck.updateDiagramm(sec, druck, "Druck");
 			sec += 1;
+	}
+	public void calcDruck(double vx, double vy) {
+		double p = (((Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2)) * 6.6 * Math.pow(10, -24))/0.001))/Math.pow(686, 2);
+		druck = p;
+	}
+	public double calcTemp()
+	{
+		temperatur = (getSpeed()*6.6 * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
+		return temperatur;
 	}
 
 	public void collisionLogic()
@@ -140,12 +147,16 @@ public class MyJfxApp extends Application
 	{
 		if ((raum.returnWidth() - b[i].x <= b[i].radius && b[i].vx > 0) || (b[i].x <= b[i].radius && b[i].vx < 0 ))
 		{
+			calcDruck(b[i].vx, b[i].vy);
 			b[i].vx = -b[i].vx;
+			druckCNT += 1;
+
 		}
 
 		if ((raum.returnHeight() - b[i].y <= b[i].radius && b[i].vy > 0) || (b[i].y <= b[i].radius) && b[i].vy < 0)
 		{
 			b[i].vy = -b[i].vy;
+			druck += 1;
 		}
 
 		for (int n = i + 1; n < b.length; n++)
