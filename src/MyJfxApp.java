@@ -1,4 +1,4 @@
-ï»¿import javafx.application.Application;
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -9,17 +9,17 @@ import javafx.stage.Stage;
 import java.util.Random;
 
 /**
- * Ãœbungsapplikation zur objektorientierten Programmierung mit JavaFX.
+ * Übungsapplikation zur objektorientierten Programmierung mit JavaFX.
  * 
  * @version 2
  * @author Lorenz
  * 
  * Das kennst du schon:
  * - Variablen und elementare Datentypen
- * - GÃ¼ltigkeitsbereiche von Variablen
+ * - Gültigkeitsbereiche von Variablen
  * - Arrays
  * - Listen
- * - BÃ¤ume/Graphen
+ * - Bäume/Graphen
  * - die OOP-Grundbegriffe Klasse, Objekt, Attribut, Methode, Vererbung und ihre 
  *   Realisierung in Java
  * 
@@ -27,13 +27,9 @@ import java.util.Random;
 public class MyJfxApp extends Application
 {
 	Group root = new Group();
-	int Anzahl = 10000;
 	SimulationTimer simulationLoop;
-	Ball[] b = new Ball[Anzahl];
 	Block[] blocke = new Block[1];
-	Random zufall = new Random();
-	double rad = 5.0;
-
+	double temperatur;
 	boolean tick = false;
 	int anzahl = 500;
 	Random zufall = new Random();
@@ -45,14 +41,18 @@ public class MyJfxApp extends Application
 
 	final BorderPane borderPane = new BorderPane();
 
-	UserInterfaceElemente Volumen = new UserInterfaceElemente();
+
 	UserInterfaceElemente Temperatur = new UserInterfaceElemente();
+	UserInterfaceElemente Druck = new UserInterfaceElemente();
+
+
+
+	UserInterfaceElemente Masse = new UserInterfaceElemente();
+	UserInterfaceElemente Volumen = new UserInterfaceElemente();
+	UserInterfaceElemente Geschwindigkeit = new UserInterfaceElemente();
 	UserInterfaceElemente Anzahl = new UserInterfaceElemente();
-	UserInterfaceElemente Diagramm = new UserInterfaceElemente();
-	UserInterfaceElemente Diagramm2 = new UserInterfaceElemente();
 
 	Scene scene = new Scene(borderPane, 600, 400);
-	SimulationTimer simulationLoop;
 	UserInterfaceTimer uiLoop;
 
 	Ball[] b = new Ball[anzahl];
@@ -62,7 +62,7 @@ public class MyJfxApp extends Application
 	{
 		for (int i = 0; i < b.length; i++)
 		{
-			b[i] = new Ball(zufall.nextInt(1000), zufall.nextInt(1000), rad, Color.RED);
+			b[i] = new Ball(zufall.nextInt(100), zufall.nextInt(1000), rad, Color.RED);
 
 			if (b[i].x >= scene.getWidth() || b[i].x <= 0)
 			{
@@ -72,10 +72,8 @@ public class MyJfxApp extends Application
 			{
 				b[i].y = scene.getHeight() / 2;
 			}
-			b[i].vx = zufall.nextDouble() * zufall.nextInt(10);
-			b[i].vy = zufall.nextDouble() * zufall.nextInt(10);
-
-			speedSample = b[i].vx * b[i].vx + b[i].vy * b[i].vy;
+			b[i].vx = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
+			b[i].vy = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
 
 			//root.getChildren().add(b[i]);
 		}
@@ -89,7 +87,9 @@ public class MyJfxApp extends Application
 		stage.getIcons().add(new Image("Main_Icon.png"));
 		stage.setScene(scene);
 		stage.show();
-		raum.resize(scene.getWidth()-670, scene.getHeight()-16);
+		raum.resize(scene.getWidth()-680, scene.getHeight()-19);
+		System.out.println(raum.returnHeight());
+		System.out.println(raum.returnWidth());
 		startSimulation();
 	}
 
@@ -122,20 +122,17 @@ public class MyJfxApp extends Application
 
 	public void updateSimulation()
 	{
-
-		//updateUI();
 		collisionLogic();
 	}
 	public void updateUI()
 	{
+			System.out.println(getSpeed());
+			temperatur = (getSpeed()*6.6 * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
 			if (sec%2 == 0) {
-				Diagramm.updateDiagramm(sec, getSpeed(), "Speed");
+				Temperatur.updateDiagramm(sec, temperatur , "Temperatur");
 			}
 			sec += 1;
-
-
 	}
-
 
 	public void collisionLogic()
 {
@@ -170,8 +167,6 @@ public class MyJfxApp extends Application
 		b[i].updatePosition();
 		}
 	}
-
-
 	public Pane createTopPane()
 	{
 		final FlowPane TopPane = new FlowPane();
@@ -193,7 +188,6 @@ public class MyJfxApp extends Application
 		BottomPane.getChildren().add(new Text("Gassimmulator von Florian Braun"));
 		return BottomPane;
 	}
-
 	public Pane createSettingsPane()
 	{
 		final VBox vBox = new VBox(5);
@@ -204,26 +198,22 @@ public class MyJfxApp extends Application
 				new Text("Temperatur [K]"),
 				Temperatur.createTextFeld(Args[1]),
 				new Text("Anzahl der Teilchen"),
-				Anzahl.createTextFeld(Args[2])
-				//Diagramm2.createLineChart(),
-				//Diagramm.createLineChart()
+				Anzahl.createTextFeld(Args[2]),
+				new Text("Masse [Kg]"),
+				Masse.createTextFeld("1"),
+				new Text("Durchschnitt |v| [m/s]"),
+				Geschwindigkeit.createTextFeld("3")
 				);
 		return vBox;
 	}
-
 	public Pane createChartPane()
 	{
-		final GridPane gridPane = new GridPane();
+		final VBox gridPane = new VBox();
 		gridPane.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
 		gridPane.getChildren().addAll(
-				Diagramm.createLineChart()
-				//  Diagramm.createSlider(0,100, 0,true, true, 5,1,1),
-				//new Text("Zoom Diagramm 1"),
-				//Diagramm2.createLineChart()
-				//Diagramm2.createSlider(0,100, 0,true, true, 5,1,1),
-				//new Text ("Zoom Diagramm 2")
+				Temperatur.createLineChart(),
+				Druck.createLineChart()
 		);
-		gridPane.setVgrow(Diagramm.createLineChart(), Priority.NEVER);
 		return gridPane;
 	}
 
@@ -232,12 +222,10 @@ public class MyJfxApp extends Application
 		speedSample = Speed;
 		for (int i = 0; i<b.length; i++)
 		{
-			Speed += b[i].vx * b[i].vx + b[i].vy * b[i].vy;
+			Speed += (b[i].vx) * (b[i].vx ) + (b[i].vy) * (b[i].vy);
 
 		}
-		Speed = Math.sqrt(Speed) / b.length;
-
-
+		Speed = (Speed / b.length) * 1/0.686;
 		return  Speed;
 	}
 }

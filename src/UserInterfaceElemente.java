@@ -39,9 +39,9 @@ public class UserInterfaceElemente
 
     public void updateDiagramm(double x, double y, String Name)
     {
-        update.getData().add(new XYChart.Data<Number, Number>(x,y));
-        update.setName(Name);
-        Diagramm.getData().add(update);
+        this.update.getData().add(new XYChart.Data<Number, Number>(x,y));
+        this.update.setName(Name);
+        this.Diagramm.getData().add(update);
     }
     public void destroyDiagramm()
     {
