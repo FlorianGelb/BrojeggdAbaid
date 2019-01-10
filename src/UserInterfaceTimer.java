@@ -1,12 +1,12 @@
 import javafx.animation.AnimationTimer;
 
-public class SimulationTimer extends AnimationTimer
+public class UserInterfaceTimer extends AnimationTimer
 {
     MyJfxApp jfxApp = null;
     int msec;
     long lastUpdate = 0;
 
-    public SimulationTimer( MyJfxApp app, int millisekunden)
+    public UserInterfaceTimer(MyJfxApp app, int millisekunden)
     {
         msec = millisekunden;
         jfxApp = app;
@@ -17,7 +17,7 @@ public class SimulationTimer extends AnimationTimer
     {
         if ((now-lastUpdate)> (msec * 1000000))
         {
-            jfxApp.updateSimulation();
+            jfxApp.updateUI();
             lastUpdate = now;
         }
     }

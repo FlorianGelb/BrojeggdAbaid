@@ -12,7 +12,7 @@ public class Block extends Rectangle implements HarterKoerper
 
     private Color c = Color.RED;
 
-    public Block(float x, float y, float width, float hight, Color c)
+    public Block(float x, float y, double width, double hight, Color c)
     {
         super(x,y, width, hight);
         setFill(c);
@@ -53,5 +53,19 @@ public class Block extends Rectangle implements HarterKoerper
             }
             }
         return false;
+    }
+
+    public void resize(double newWidth, double newHight)
+    {
+        this.setWidth(newWidth);
+        this.setHeight(newHight);
+    }
+    public double returnWidth()
+    {
+        return this.getWidth();
+    }
+
+    public double returnHeight(){
+        return this.getHeight();
     }
 }
