@@ -31,10 +31,10 @@ public class MyJfxApp extends Application
 	Block[] blocke = new Block[1];
 	double temperatur;
 	boolean tick = false;
-	int anzahl = 500;
+	int anzahl = 5000;
 	Random zufall = new Random();
 	static String[] Args = new String[4];
-	double rad = 10.0;
+	double rad = 1.0;
 	double speedSample;
 	int sec = 0;
 	double Speed = 0;
@@ -73,8 +73,8 @@ public class MyJfxApp extends Application
 			{
 				b[i].y = scene.getHeight() / 2;
 			}
-			b[i].vx = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
-			b[i].vy = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
+			b[i].vx = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10000);
+			b[i].vy = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10000);
 
 			//root.getChildren().add(b[i]);
 		}
@@ -96,7 +96,7 @@ public class MyJfxApp extends Application
 
 	private void startSimulation()
 	{
-		simulationLoop = new SimulationTimer(this, 1);
+		simulationLoop = new SimulationTimer(this, 5);
 		uiLoop = new UserInterfaceTimer(this, 1000);
 		simulationLoop.start();
 		uiLoop.start();
@@ -127,17 +127,17 @@ public class MyJfxApp extends Application
 	}
 	public void updateUI()
 	{
-			Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur");
-			Druck.updateDiagramm(sec, druck, "Druck");
+			Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur [K]");
+			Druck.updateDiagramm(sec, calcDruck(), "Druck");
 			sec += 1;
 	}
-	public void calcDruck(double vx, double vy) {
-		double p = (((Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2)) * 6.6 * Math.pow(10, -24))/0.001))/Math.pow(686, 2);
-		druck = p;
+	public double calcDruck() {
+		double p = (2/3 * anzahl / (1 * Math.pow(0.686,3)*(6.6 * Math.pow(10,-2))*getSpeed()));
+		return  p;
 	}
 	public double calcTemp()
 	{
-		temperatur = (getSpeed()*6.6 * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
+		temperatur = (getSpeed()*6.6 * Math.pow(10,-2) * (2.7613008 * Math.pow(10, 23.0)));
 		return temperatur;
 	}
 
@@ -147,7 +147,7 @@ public class MyJfxApp extends Application
 	{
 		if ((raum.returnWidth() - b[i].x <= b[i].radius && b[i].vx > 0) || (b[i].x <= b[i].radius && b[i].vx < 0 ))
 		{
-			calcDruck(b[i].vx, b[i].vy);
+			//calcDruck(b[i].vx, b[i].vy);
 			b[i].vx = -b[i].vx;
 			druckCNT += 1;
 
