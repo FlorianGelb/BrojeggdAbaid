@@ -60,6 +60,7 @@ public class Block extends Rectangle implements HarterKoerper
         this.setWidth(newWidth);
         this.setHeight(newHight);
     }
+
     public double returnWidth()
     {
         return this.getWidth();
@@ -67,5 +68,11 @@ public class Block extends Rectangle implements HarterKoerper
 
     public double returnHeight(){
         return this.getHeight();
+    }
+
+    public void reposition(double newPositionX, double newPositionY)
+    {
+        this.setX(newPositionX);
+        this.setY(newPositionY);
     }
 }

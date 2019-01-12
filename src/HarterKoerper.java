@@ -1,4 +1,4 @@
 public interface HarterKoerper
 {
-    public boolean collideWith(HarterKoerper h);
+    boolean collideWith(HarterKoerper h);
 }

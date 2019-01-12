@@ -46,10 +46,7 @@ public class Ball extends Circle implements HarterKoerper {
 	{
 		if (h.getClass() == Ball.class) {
 			Ball b = (Ball) h;
-			if (((this.x - b.x) * (this.x - b.x) + (this.y - b.y) * (this.y - b.y)) < (this.radius + b.radius) * (this.radius + b.radius)) {
-				return true;
-			}
-			return false;
+			return ((this.x - b.x) * (this.x - b.x) + (this.y - b.y) * (this.y - b.y)) < (this.radius + b.radius) * (this.radius + b.radius);
 		}
 		return false;
 	}
