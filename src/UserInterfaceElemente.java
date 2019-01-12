@@ -41,8 +41,11 @@ public class UserInterfaceElemente
     {
         this.update.getData().add(new XYChart.Data<Number, Number>(x,y));
         this.update.setName(Name);
-        if (this.Diagramm.getData().contains(update) == false) {
+
+    if (this.Diagramm.getData().contains(update) == false) {
             this.Diagramm.getData().add(update);
+            if (x != 0)
+                this.update.getData().clear();
         }
     }
     public void destroyDiagramm()

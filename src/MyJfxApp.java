@@ -34,9 +34,12 @@ public class MyJfxApp extends Application
     double masseT;
     double velocity = 3;
     double velocityT;
+    double volumenT;
+    double volumen = 1;
+    double druckT = 0;
 
 	UserInterfaceElemente Temperatur = new UserInterfaceElemente();
-	UserInterfaceElemente Druck = new UserInterfaceElemente();
+	UserInterfaceElemente DruckT = new UserInterfaceElemente();
 
     UserInterfaceElemente ButtonChange = new UserInterfaceElemente();
     UserInterfaceElemente ButtonExit = new UserInterfaceElemente();
@@ -45,6 +48,8 @@ public class MyJfxApp extends Application
 	UserInterfaceElemente Volumen = new UserInterfaceElemente();
 	UserInterfaceElemente Geschwindigkeit = new UserInterfaceElemente();
 	UserInterfaceElemente Anzahl = new UserInterfaceElemente();
+	UserInterfaceElemente Kraft = new UserInterfaceElemente();
+	UserInterfaceElemente Druck = new UserInterfaceElemente();
 
 	Scene scene = new Scene(borderPane, 600, 400);
 	UserInterfaceTimer uiLoop;
@@ -95,8 +100,8 @@ public class MyJfxApp extends Application
 	public void start(Stage stage)
 	{
 	    addBall(anzahl);
-
         stage.getIcons().add(new Image("Main_Icon.png"));
+        stage.setTitle("Gassimmulator von Florian Braun");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setResizable(false);
@@ -112,7 +117,6 @@ public class MyJfxApp extends Application
 		stage.show();
 		paneHight = borderPane.getCenter().getBoundsInLocal().getHeight() - 10;
 		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 10;
-
 		startSimulation();
 	}
 
@@ -140,6 +144,7 @@ public class MyJfxApp extends Application
 	        anzahlT = Integer.parseInt(Anzahl.returnText());
 	        masseT = Double.parseDouble(Masse.returnText());
 	        velocityT = Double.parseDouble(Geschwindigkeit.returnText());
+	        volumenT = Double.parseDouble(Volumen.returnText());
 
 			if (ButtonExit.returnButtonValue())
             {
@@ -171,12 +176,28 @@ public class MyJfxApp extends Application
                  timerStart();
 
                 }
+                if (volumenT != volumen)
+                {
+                    timerStop();
+                    volumen = volumenT;
+                    timerStart();
+                }
+                ButtonChange.clicked = false;
             }
 
 	        Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur [K]");
-			Druck.updateDiagramm(sec, Math.sqrt(getSpeed()), "Druck");
-			sec += 1;
+			DruckT.updateDiagramm(sec, druckCNT * calcDruck(), "Druck(t) [N/m^2]");
+			Kraft.updateDiagramm(sec, calcKraft(), "Kraft/Teilchen [N]");
+			sec +=1;
+			Druck.updateDiagramm(sec, calcDruckDurchschnitt(), "Druck Durchschnitt[*10^-15 N/m^2]");
 	}
+	public double calcDruckDurchschnitt()
+    {
+        druckT += calcDruck();
+        double p = (druckT / sec) * Math.pow(10,15);
+        return p;
+    }
+
 	public void timerStart()
     {
         uiLoop.start();
@@ -188,9 +209,15 @@ public class MyJfxApp extends Application
         simulationLoop.stop();
     }
 	public double calcDruck() {
-		double p = (2/3 * anzahl / (1 * Math.pow(0.686,3)*(6.6 * Math.pow(10,-2))*getSpeed()));
+		double p =  calcKraft() / 2*(paneHight * paneHight + (volumen/paneHight*paneWidth) * (paneHight+paneWidth));
+		druckCNT = 0;
 		return  p;
 	}
+	public double calcKraft()
+    {
+        double f = (Math.sqrt(getSpeed()) * (masse * Math.pow(10,-24)) / (5 * Math.pow(10, -3)));
+        return  f;
+    }
 	public double calcTemp()
 	{
 		temperatur = (getSpeed()* masse * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
@@ -203,10 +230,14 @@ public class MyJfxApp extends Application
 	{
 
 	    if(((e.x + e.vx)  <= e.radius && e.vx <0)|| ((e.x + e.vx) >= paneWidth) && e.vx >0)
-        {e.vx = - e.vx;}
+        {
+            e.vx = - e.vx;
+            druckCNT +=1;
+        }
 	    if ((((e.y + e.vy)  <= e.radius && e.vy <0)|| ((e.y + e.vx) >= paneHight) && e.vy >0))
         {
             e.vy = - e.vy;
+            druckCNT +=1;
         }
 		for (Ball n: b)
 		{
@@ -254,13 +285,13 @@ public class MyJfxApp extends Application
 		vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
 		vBox.getChildren().addAll(
 				new Text("Volumen [m^3]"),
-				Volumen.createTextFeld(Args[0]),
+				Volumen.createTextFeld(String.valueOf(volumen)),
 				new Text("Anzahl der Teilchen"),
-				Anzahl.createTextFeld(Args[2]),
+				Anzahl.createTextFeld(String.valueOf(anzahl)),
 				new Text("Masse [*10^-24Kg]"),
-				Masse.createTextFeld("1"),
+				Masse.createTextFeld(String.valueOf(masse)),
 				new Text("Durchschnitt |v| [m/s]"),
-				Geschwindigkeit.createTextFeld("3"),
+				Geschwindigkeit.createTextFeld(String.valueOf(velocity)),
                 ButtonChange.createButton("Werte ‰ndern"),
                 ButtonExit.createButton("Programm schlieﬂen")
 				);
@@ -268,13 +299,21 @@ public class MyJfxApp extends Application
 	}
 	public Pane createChartPane()
 	{
-	    final VBox gridPane = new VBox();
-		gridPane.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
-		gridPane.getChildren().addAll(
+	    final HBox chartPane = new HBox();
+	    final VBox vbox = new VBox();
+		final VBox vbox2 = new VBox();
+	    vbox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
+		vbox.getChildren().addAll(
 				Temperatur.createLineChart(),
-				Druck.createLineChart()
+				DruckT.createLineChart()
 		);
-		return gridPane;
+		vbox2.getChildren().addAll(
+		        Kraft.createLineChart(),
+                Druck.createLineChart()
+        );
+		chartPane.getChildren().add(vbox);
+		chartPane.getChildren().add(vbox2);
+		return chartPane;
 	}
 
 	public double getSpeed()
