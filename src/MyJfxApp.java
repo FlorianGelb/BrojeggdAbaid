@@ -1,6 +1,4 @@
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -9,27 +7,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.stage.WindowEvent;
-
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.event.EventHandler;
-/**
- * Übungsapplikation zur objektorientierten Programmierung mit JavaFX.
- * 
- * @version 2
- * @author Lorenz
- * 
- * Das kennst du schon:
- * - Variablen und elementare Datentypen
- * - Gültigkeitsbereiche von Variablen
- * - Arrays
- * - Listen
- * - Bäume/Graphen
- * - die OOP-Grundbegriffe Klasse, Objekt, Attribut, Methode, Vererbung und ihre 
- *   Realisierung in Java
- * 
- */
+
 public class MyJfxApp extends Application
 {
 	static String[] Args = new String[4];
@@ -41,7 +21,7 @@ public class MyJfxApp extends Application
 	boolean tick = false;
 	int anzahl = 10;
 	Random zufall = new Random();
-	double rad = 5.0;
+	double rad = 1.0;
 	double speedSample;
 	int sec = 0;
 	double Speed = 0;
@@ -49,6 +29,11 @@ public class MyJfxApp extends Application
 	double druck;
     double paneWidth;
     double paneHight;
+    int anzahlT;
+    double masse = 1;
+    double masseT;
+    double velocity = 3;
+    double velocityT;
 
 	UserInterfaceElemente Temperatur = new UserInterfaceElemente();
 	UserInterfaceElemente Druck = new UserInterfaceElemente();
@@ -65,7 +50,6 @@ public class MyJfxApp extends Application
 	UserInterfaceTimer uiLoop;
 
 	ArrayList<Ball> b = new ArrayList<Ball>();
-	Block raum= new Block(0,0,0,0,Color.BLACK);
 
 	public static void main(String[] args)
 	{
@@ -98,14 +82,17 @@ public class MyJfxApp extends Application
         {
             b.add(new Ball(zufall.nextInt(100), zufall.nextInt(1000), rad, Color.RED));
         }
+        updateVelocity(velocity);
+    }
+    public void updateVelocity(double newV)
+    {
         for (Ball e: b)
         {
 
-            e.vx = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
-            e.vy = zufall.nextDouble() * zufall.nextDouble()*zufall.nextInt(10);
+            e.vx = Math.sqrt(newV*newV/2) ;
+            e.vy = Math.sqrt(newV/2);
         }
     }
-
 	public void start(Stage stage)
 	{
 	    addBall(anzahl);
@@ -140,8 +127,7 @@ public class MyJfxApp extends Application
 	{
 		simulationLoop = new SimulationTimer(this, 5);
 		uiLoop = new UserInterfaceTimer(this, 1000);
-		simulationLoop.start();
-		uiLoop.start();
+		timerStart();
 
 	}
 
@@ -152,6 +138,10 @@ public class MyJfxApp extends Application
 	}
 	public void updateUI()
 	{
+	        anzahlT = Integer.parseInt(Anzahl.returnText());
+	        masseT = Double.parseDouble(Masse.returnText());
+	        velocityT = Double.parseDouble(Geschwindigkeit.returnText());
+
 			if (ButtonExit.returnButtonValue())
             {
                 Window stage = scene.getWindow();
@@ -159,22 +149,52 @@ public class MyJfxApp extends Application
             }
 			if (ButtonChange.returnButtonValue())
             {
-                addBall(Integer.parseInt(Anzahl.returnText())-anzahl);
-                refreshCenterPane();
-                anzahl = Integer.parseInt(Anzahl.returnText());
-                ButtonChange.clicked = false;
+                if (anzahl != anzahlT)
+                {
+                    timerStop();
+                    addBall(anzahlT -anzahl);
+                    anzahl = anzahlT;
+                    refreshCenterPane();
+                    timerStart();
+                    ButtonChange.clicked = false;
+                }
+                if (masse != masseT)
+                {
+                    timerStop();
+                    masse = masseT;
+                    timerStart();
+                    ButtonChange.clicked = false;
+                }
+                if(velocity != velocityT)
+                {
+                 timerStop();
+                 updateVelocity(velocityT);
+                 timerStart();
+
+                }
             }
+
 	        Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur [K]");
-			Druck.updateDiagramm(sec, getSpeed(), "Druck");
+			Druck.updateDiagramm(sec, Math.sqrt(getSpeed()), "Druck");
 			sec += 1;
 	}
+	public void timerStart()
+    {
+        uiLoop.start();
+        simulationLoop.start();
+    }
+    public void timerStop()
+    {
+        uiLoop.stop();
+        simulationLoop.stop();
+    }
 	public double calcDruck() {
 		double p = (2/3 * anzahl / (1 * Math.pow(0.686,3)*(6.6 * Math.pow(10,-2))*getSpeed()));
 		return  p;
 	}
 	public double calcTemp()
 	{
-		temperatur = (getSpeed()*6.6 * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
+		temperatur = (getSpeed()* masse * Math.pow(10,-24) * (2.7613008 * Math.pow(10, 23.0)));
 		return temperatur;
 	}
 
@@ -236,11 +256,9 @@ public class MyJfxApp extends Application
 		vBox.getChildren().addAll(
 				new Text("Volumen [m^3]"),
 				Volumen.createTextFeld(Args[0]),
-				new Text("Temperatur [K]"),
-				Temperatur.createTextFeld(Args[1]),
 				new Text("Anzahl der Teilchen"),
 				Anzahl.createTextFeld(Args[2]),
-				new Text("Masse [Kg]"),
+				new Text("Masse [*10^-24Kg]"),
 				Masse.createTextFeld("1"),
 				new Text("Durchschnitt |v| [m/s]"),
 				Geschwindigkeit.createTextFeld("3"),
