@@ -21,7 +21,7 @@ public class MyJfxApp extends Application
 	boolean tick = false;
 	int anzahl = 10;
 	Random zufall = new Random();
-	double rad = 1.0;
+	double rad = 10.0;
 	double speedSample;
 	int sec = 0;
 	double Speed = 0;
@@ -88,9 +88,8 @@ public class MyJfxApp extends Application
     {
         for (Ball e: b)
         {
-
-            e.vx = Math.sqrt(newV*newV/2) ;
-            e.vy = Math.sqrt(newV/2);
+            e.vx =  newV/Math.sqrt(2);
+            e.vy = newV/Math.sqrt(2);
         }
     }
 	public void start(Stage stage)
