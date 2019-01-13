@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,15 +59,14 @@ public class MyJfxApp extends Application {
 	ArrayList<Ball> b = new ArrayList<Ball>();
 	
 	/**
-	 * @param args Der Konstruktor für die Hauptklasse "MyJfxApp" nimmt als Paramenter die Komandozeilenparameter
+	 * @param args Die Methode "main()" nimmt als Paramenter die Komandozeilenparameter und startet das Programm.
 	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
 	/**
-	 *
-	 * @param stage die Methode "start" nimmt als Parameter eine Stage entgegen
+	 * @param stage die Methode "start()" nimmt als Parameter eine Stage entgegen
 	 *              die Stage "stage" ist in dieser Anwendung der sog. top level JavaFX Kontainer.
 	 */
 	public void start(Stage stage) {
@@ -76,15 +76,15 @@ public class MyJfxApp extends Application {
 		stage.setScene(scene);
 		stage.setMaximized(true);
 		stage.setResizable(false);
-		stage.setFullScreen(false);
+		stage.setFullScreen(true);
 		stage.setFullScreenExitHint("");
 		
-		borderPane.setTop(createTopPane());
 		borderPane.setRight(createChartPane());
 		borderPane.setCenter(createCenterPane());
 		borderPane.setLeft(createSettingsPane());
 		
 		stage.show();
+		
 		paneHight = borderPane.getCenter().getBoundsInLocal().getHeight() - 10;
 		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 10;
 		
@@ -92,8 +92,8 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "startSimulation" startet sowohl den Timer, der die Simulation updatet (simulationLoop), als auch den
-	 * Timer, der die GUI updatet(uiLoop)
+	 * Die Methode "startSimulation()" startet sowohl den Timer, der die Simulation updatet (simulationLoop), als auch den
+	 * Timer, der die GUI updatet(uiLoop).
 	 */
 	private void startSimulation() {
 		simulationLoop = new SimulationTimer(this, ZEIT_SCHRITT);
@@ -102,20 +102,35 @@ public class MyJfxApp extends Application {
 		
 	}
 	
+	/**
+	 * Die Methode "timerStart()" startet den Timer für die GUI und den Timer für die Simulation.
+	 */
 	public void timerStart() {
 		uiLoop.start();
 		simulationLoop.start();
 	}
 	
+	/**
+	 * Die Methode "timerStop()" stopt den Timer für die GUI und den Timer für die Simulation .
+	 */
 	public void timerStop() {
 		uiLoop.stop();
 		simulationLoop.stop();
 	}
 	
+	/**
+	 * die Methode "updateSimulation()" wird alle 5ms von dem Timer "simulationLoop" aufgerufen und startet die Kollisionsabfrage
+	 */
 	public void updateSimulation() {
+		
 		collisionLogic();
 	}
 	
+	/**
+	 * Die Methode "addBall" fügt n Bälle hinzu oder löscht n Bälle
+	 *
+	 * @param n der Parameter n, des Typs Integer, legt fest, wieviele Bälle hinzugefügt (falls n größer 0) oder  gelöscht (falls n kleiner 0) werden.
+	 */
 	public void addBall(int n) {
 		if (n < 0) {
 			for (int i = 0; i <= n * -1; i++) {
@@ -128,6 +143,11 @@ public class MyJfxApp extends Application {
 		updateVelocity(velocity);
 	}
 	
+	/**
+	 * Die Methode "updateVelocity" ändert die Geschwindigkeitsvektoren so, dass der Betrag der Vektoren newV entspricht.
+	 *
+	 * @param newV Betrag des neuen Geschwindigkeitsvektor.
+	 */
 	public void updateVelocity(double newV) {
 		for (Ball e : b) {
 			e.vx = newV / Math.sqrt(2);
@@ -135,11 +155,19 @@ public class MyJfxApp extends Application {
 		}
 	}
 	
+	/**
+	 * Die Methode "refreshCenterPane()" aktuallisiert die centerPane, nachdem die Anzahl der Bälle geändert wurde.
+	 */
 	private void refreshCenterPane() {
 		borderPane.setCenter(null);
 		borderPane.setCenter(createCenterPane());
 	}
 	
+	/**
+	 * Die Methode "collisionLogic()" überprüft, ob die Bälle mit anderen Bällen oder mit dem Rand kollidieren.
+	 * Falls ein Ball mit dem Rand kollidiert, werden die Geschwindigkeitsvektoren negativiert.
+	 * Falls ein Ball mit einen anderen Ball kollidiert, werden die Geschwindigkeitsvektoren beider Bälle ausgetauscht.
+	 */
 	public void collisionLogic() {
 		for (Ball e : b) {
 			
@@ -170,6 +198,10 @@ public class MyJfxApp extends Application {
 		}
 	}
 	
+	/**
+	 * Die Methode "updateUI()" wird einmal pro Sekunde von dem Timer uiLoop aufgerufen, um die Steuerelemente und Diagramme
+	 * zu Aktuallisieren.
+	 */
 	public void updateUI() {
 		anzahlT = Integer.parseInt(Anzahl.returnText());
 		masseT = Double.parseDouble(Masse.returnText());
@@ -216,28 +248,53 @@ public class MyJfxApp extends Application {
 		
 	}
 	
+	/**
+	 * Die Methode "calcDruckDurchschnitt()" errechnet den Durchschnitte aller gemessenen Werte für den Druck über Zeit
+	 *
+	 * @return gibt den momentanten Durchschnitt des Drucks wieder. p = druck(t) / sec * 10^15
+	 */
 	public double calcDruckDurchschnitt() {
 		druckT += calcDruck();
 		double p = (druckT / sec) * Math.pow(10, 15);
 		return p;
 	}
 	
+	/**
+	 * Die Methode "calcDruck()" errechnet den Druck zum Zeitpunkt t.
+	 *
+	 * @return gibt den Druck zu Zeitpunkt t wieder. p(t) = Anzahl der Kollisionen im Zeitschritt * F / 2(Höhe * Breite + (Volumen / Höhe * Breite) * (Höhe + Breite))
+	 */
 	public double calcDruck() {
 		double p = calcKraft() / 2 * (paneHight * paneHight + (volumen / paneHight * paneWidth) * (paneHight + paneWidth));
 		druckCNT = 0;
 		return p;
 	}
 	
+	/**
+	 * Die Methode "calcKraft" errechnet die Kraft, die ein einzelnes Teilchen auswirken kann.
+	 *
+	 * @return gibt den Betrag der Kraft wieder, die ein einzelnes Teilchen auswirken kann: F = |v| * (Masse / 5ms)
+	 */
 	public double calcKraft() {
 		double f = (Math.sqrt(calcGeschwindigkeit()) * (masse * Math.pow(10, -24)) / ZEIT_SCHRITT * Math.pow(10, -3));
 		return f;
 	}
 	
+	/**
+	 * Die Methode "calcTemp()" errechnet die momentane Temperatur des Gases
+	 *
+	 * @return gibt die Temperatur wieder. T = |v|^2 * (Masse / 2Kb)
+	 */
 	public double calcTemp() {
 		temperatur = (calcGeschwindigkeit() * masse * Math.pow(10, -24) * 1 / (2 * BOLZTMANN_KONSTANTE));
 		return temperatur;
 	}
 	
+	/**
+	 * Die Methode "calcGeschwindigkeit()" errechnet den durchschnittlichen betrag der Geschwindigkeitsvektoren vx und vy
+	 *
+	 * @return gibt |v|^2 wieder: |v|^2 = (vx[n]^2 + vy[n]^2) / Anzahl der Partikel; n hat kann die Werte [0;Anzahl der Partikel[ annehmen.
+	 */
 	public double calcGeschwindigkeit() {
 		speedSample = speed;
 		for (Ball e : b) {
@@ -248,19 +305,23 @@ public class MyJfxApp extends Application {
 		return speed;
 	}
 	
-	
-	public Pane createTopPane() {
-		final FlowPane TopPane = new FlowPane();
-		
-		return TopPane;
-	}
-	
+	/**
+	 * Erstellt die centerPane, die als Gefäß für das Gas dient.
+	 *
+	 * @return gibt die centerPane wieder.
+	 */
 	public Pane createCenterPane() {
 		final Pane CenterPane = new Pane();
 		CenterPane.getChildren().addAll(b);
 		return CenterPane;
 	}
 	
+	/**
+	 * Die Methode "createSettingsPane()" erstellt die Pane des Typs VBox, die and der linken Seite des Bildschirms den Eingabebereich einthält.
+	 *
+	 * @return gibt eine Pane wieder, die Textfelder für das Volumen, die Anzahl der Teilchen, die Masse und die
+	 * Durchschnittliche Geschwindigkeit beinhaltet. Ebenfalls sind ein Knopf um die neuen Eingabewerte zu prozessieren und um das Fenster zu schließen enthalten.
+	 */
 	public Pane createSettingsPane() {
 		final VBox vBox = new VBox(5);
 		vBox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
@@ -279,6 +340,11 @@ public class MyJfxApp extends Application {
 		return vBox;
 	}
 	
+	/**
+	 * Die Methode "createChartPane()" erstellt eine HBox, die zwei Panes des Typs VBox beinhaltet. Diese Beinhalten die Diagramme.
+	 *
+	 * @return gibt die HBox "chartPane wieder.
+	 */
 	public Pane createChartPane() {
 		final HBox chartPane = new HBox();
 		final VBox vbox = new VBox();
