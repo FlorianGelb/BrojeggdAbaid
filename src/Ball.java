@@ -3,50 +3,74 @@ import javafx.scene.shape.Circle;
 
 
 /**
- * @version 1
  * @author Lorenz
+ * @version 1
  */
 public class Ball extends Circle implements HarterKoerper {
-    static int ballAnzahl = 0;
-    int ballnummer = 0;
-	double radius = 4;
-	double x = 0;
-	double y = 0;
+	static int ballAnzahl = 0;
+	int ballnummer = 0;
+	double radius;
+	double x;
+	double y;
 	double vx = 0.4;
 	double vy = 0.2;
-	double ax = 1;
-	double ay = 9.81;
-	double m = 1;
 	Color c = Color.BLUE;
-
-	public Ball(double bx, double by, double radius, Color col)
-	{
+	
+	public Ball(double bx, double by, double radius, Color color) {
 		super(bx, by, radius);
 		x = bx;
 		y = by;
-		c = col;
-		setFill(col);
+		c = color;
+		
+		setFill(color);
+		
 		ballnummer = ballAnzahl;
 		ballAnzahl++;
-
+		
 	}
-	public void setColor(Color farbe)
+	
+	public double getX()
 	{
+		return x;
+	}
+	
+	public double getY()
+	{
+		return y;
+	}
+	
+	public double getVx()
+	{
+		return vx;
+	}
+	
+	public double getVy()
+	{
+		return vy;
+	}
+	
+	public void setColor(Color farbe) {
 		c = farbe;
 		setFill(farbe);
 	}
-	public void updatePosition()
-	{
+	
+	public void updatePosition() {
 		x = x + vx;
 		y = y + vy;
-
+		
 		relocate(x, y);
 	}
-	public boolean collideWith(HarterKoerper h)
-	{
+	
+	public boolean collideWith(HarterKoerper h) {
 		if (h.getClass() == Ball.class) {
 			Ball b = (Ball) h;
-			return ((this.x - b.x) * (this.x - b.x) + (this.y - b.y) * (this.y - b.y)) < (this.radius + b.radius) * (this.radius + b.radius);
+			double x_ball = b.getX() + b.getVx();
+			double y_ball = b.getY() + b.getVy();
+			
+			if (((this.x - x_ball) * (this.x - x_ball) +
+					(this.y - y_ball) * (this.y - y_ball)) <= (this.radius + b.getRadius()) * (this.radius + b.getRadius())) {
+				return true;
+			}
 		}
 		return false;
 	}
