@@ -2,6 +2,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 
+
 public class Block extends Rectangle implements HarterKoerper {
 	private double x = 0;
 	private double y = 0;

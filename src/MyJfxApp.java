@@ -6,9 +6,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
 import java.util.ArrayList;
 import java.util.Random;
+
+/**
+ * @author Florian Braun
+ * @version 1.0
+ */
 
 public class MyJfxApp extends Application {
 	static final double BOLZTMANN_KONSTANTE = 1.3806504 * Math.pow(10, -23);
@@ -53,10 +57,18 @@ public class MyJfxApp extends Application {
 	Scene scene = new Scene(borderPane, 600, 400);
 	ArrayList<Ball> b = new ArrayList<Ball>();
 	
+	/**
+	 * @param args Der Konstruktor für die Hauptklasse "MyJfxApp" nimmt als Paramenter die Komandozeilenparameter
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
+	/**
+	 *
+	 * @param stage die Methode "start" nimmt als Parameter eine Stage entgegen
+	 *              die Stage "stage" ist in dieser Anwendung der sog. top level JavaFX Kontainer.
+	 */
 	public void start(Stage stage) {
 		addBall(anzahl);
 		stage.getIcons().add(new Image("Main_Icon.png"));
@@ -79,6 +91,10 @@ public class MyJfxApp extends Application {
 		startSimulation();
 	}
 	
+	/**
+	 * Die Methode "startSimulation" startet sowohl den Timer, der die Simulation updatet (simulationLoop), als auch den
+	 * Timer, der die GUI updatet(uiLoop)
+	 */
 	private void startSimulation() {
 		simulationLoop = new SimulationTimer(this, ZEIT_SCHRITT);
 		uiLoop = new UserInterfaceTimer(this, 1000);
