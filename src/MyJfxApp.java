@@ -87,7 +87,7 @@ public class MyJfxApp extends Application {
 		
 		paneHight = borderPane.getCenter().getBoundsInLocal().getHeight() - 10;
 		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 10;
-		
+		System.out.print(paneHight);
 		startSimulation();
 	}
 	
@@ -103,7 +103,7 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "timerStart()" startet den Timer für die GUI und den Timer für die Simulation.
+	 * Die Methode "timerStart()" startet den Timer f?r die GUI und den Timer f?r die Simulation.
 	 */
 	public void timerStart() {
 		uiLoop.start();
@@ -111,7 +111,7 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "timerStop()" stopt den Timer für die GUI und den Timer für die Simulation .
+	 * Die Methode "timerStop()" stopt den Timer f?r die GUI und den Timer f?r die Simulation .
 	 */
 	public void timerStop() {
 		uiLoop.stop();
@@ -127,9 +127,9 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "addBall" fügt n Bälle hinzu oder löscht n Bälle
+	 * Die Methode "addBall" f?gt n B?lle hinzu oder l?scht n B?lle
 	 *
-	 * @param n der Parameter n, des Typs Integer, legt fest, wieviele Bälle hinzugefügt (falls n größer 0) oder  gelöscht (falls n kleiner 0) werden.
+	 * @param n der Parameter n, des Typs Integer, legt fest, wieviele B?lle hinzugef?gt (falls n gr??er 0) oder  gel?scht (falls n kleiner 0) werden.
 	 */
 	public void addBall(int n) {
 		if (n < 0) {
@@ -138,13 +138,13 @@ public class MyJfxApp extends Application {
 			}
 		}
 		for (int i = 0; i <= n; i++) {
-			b.add(new Ball(zufall.nextInt(100), zufall.nextInt(1000), rad, Color.RED));
+			b.add(new Ball(zufall.nextInt(100), zufall.nextInt(100), rad, Color.RED));
 		}
 		updateVelocity(velocity);
 	}
 	
 	/**
-	 * Die Methode "updateVelocity" ändert die Geschwindigkeitsvektoren so, dass der Betrag der Vektoren newV entspricht.
+	 * Die Methode "updateVelocity" ?ndert die Geschwindigkeitsvektoren so, dass der Betrag der Vektoren newV entspricht.
 	 *
 	 * @param newV Betrag des neuen Geschwindigkeitsvektor.
 	 */
@@ -156,7 +156,7 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "refreshCenterPane()" aktuallisiert die centerPane, nachdem die Anzahl der Bälle geändert wurde.
+	 * Die Methode "refreshCenterPane()" aktuallisiert die centerPane, nachdem die Anzahl der B?lle ge?ndert wurde.
 	 */
 	private void refreshCenterPane() {
 		borderPane.setCenter(null);
@@ -164,9 +164,9 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "collisionLogic()" überprüft, ob die Bälle mit anderen Bällen oder mit dem Rand kollidieren.
+	 * Die Methode "collisionLogic()" ?berpr?ft, ob die B?lle mit anderen B?llen oder mit dem Rand kollidieren.
 	 * Falls ein Ball mit dem Rand kollidiert, werden die Geschwindigkeitsvektoren negativiert.
-	 * Falls ein Ball mit einen anderen Ball kollidiert, werden die Geschwindigkeitsvektoren beider Bälle ausgetauscht.
+	 * Falls ein Ball mit einen anderen Ball kollidiert, werden die Geschwindigkeitsvektoren beider B?lle ausgetauscht.
 	 */
 	public void collisionLogic() {
 		for (Ball e : b) {
@@ -249,7 +249,7 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "calcDruckDurchschnitt()" errechnet den Durchschnitte aller gemessenen Werte für den Druck über Zeit
+	 * Die Methode "calcDruckDurchschnitt()" errechnet den Durchschnitte aller gemessenen Werte f?r den Druck ?ber Zeit
 	 *
 	 * @return gibt den momentanten Durchschnitt des Drucks wieder. p = druck(t) / sec * 10^15
 	 */
@@ -262,7 +262,7 @@ public class MyJfxApp extends Application {
 	/**
 	 * Die Methode "calcDruck()" errechnet den Druck zum Zeitpunkt t.
 	 *
-	 * @return gibt den Druck zu Zeitpunkt t wieder. p(t) = Anzahl der Kollisionen im Zeitschritt * F / 2(Höhe * Breite + (Volumen / Höhe * Breite) * (Höhe + Breite))
+	 * @return gibt den Druck zu Zeitpunkt t wieder. p(t) = Anzahl der Kollisionen im Zeitschritt * F / 2(H?he * Breite + (Volumen / H?he * Breite) * (H?he + Breite))
 	 */
 	public double calcDruck() {
 		double p = calcKraft() / 2 * (paneHight * paneHight + (volumen / paneHight * paneWidth) * (paneHight + paneWidth));
@@ -317,10 +317,10 @@ public class MyJfxApp extends Application {
 	}
 	
 	/**
-	 * Die Methode "createSettingsPane()" erstellt die Pane des Typs VBox, die and der linken Seite des Bildschirms den Eingabebereich einthält.
+	 * Die Methode "createSettingsPane()" erstellt die Pane des Typs VBox, die and der linken Seite des Bildschirms den Eingabebereich einth?lt.
 	 *
-	 * @return gibt eine Pane wieder, die Textfelder für das Volumen, die Anzahl der Teilchen, die Masse und die
-	 * Durchschnittliche Geschwindigkeit beinhaltet. Ebenfalls sind ein Knopf um die neuen Eingabewerte zu prozessieren und um das Fenster zu schließen enthalten.
+	 * @return gibt eine Pane wieder, die Textfelder f?r das Volumen, die Anzahl der Teilchen, die Masse und die
+	 * Durchschnittliche Geschwindigkeit beinhaltet. Ebenfalls sind ein Knopf um die neuen Eingabewerte zu prozessieren und um das Fenster zu schlie?en enthalten.
 	 */
 	public Pane createSettingsPane() {
 		final VBox vBox = new VBox(5);
