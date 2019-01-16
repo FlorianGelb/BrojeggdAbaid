@@ -78,7 +78,7 @@ public class MyJfxApp extends Application {
 		stage.setScene(scene);
 		stage.setMaximized(true);
 		stage.setResizable(false);
-		stage.setFullScreen(false);
+		stage.setFullScreen(true);
 		stage.setFullScreenExitHint("");
 		
 		System.out.println(screenSize.getWidth());
