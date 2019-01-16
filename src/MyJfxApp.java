@@ -6,8 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import sun.security.ssl.Debug;
-
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -57,6 +56,7 @@ public class MyJfxApp extends Application {
 	UserInterfaceTimer uiLoop;
 	SimulationTimer simulationLoop;
 	Random zufall = new Random();
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	Scene scene = new Scene(borderPane, 600, 400);
 	ArrayList<Ball> b = new ArrayList<Ball>();
 	
@@ -81,15 +81,20 @@ public class MyJfxApp extends Application {
 		stage.setFullScreen(false);
 		stage.setFullScreenExitHint("");
 		
+		System.out.println(screenSize.getWidth());
+		
 		borderPane.setRight(createChartPane());
 		borderPane.setCenter(createCenterPane());
 		borderPane.setLeft(createSettingsPane());
+
 		
 		stage.show();
 		
 		paneHight = borderPane.getCenter().getBoundsInLocal().getHeight() - 10;
-		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 10;
-		System.out.print(paneHight);
+		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 30;
+		
+		
+		System.out.print(paneWidth);
 		startSimulation();
 	}
 	
@@ -256,7 +261,7 @@ public class MyJfxApp extends Application {
 		
 		Temperatur.updateDiagramm(sec, calcTemp(0), "absolute Temperatur [K]");
 		DruckT.updateDiagramm(sec,  calcDruck(), "Druck(t) [N/m^2]");
-		Kraft.updateDiagramm(sec, calcKraft(), "Kraft/Teilchen [N]");
+		Kraft.updateDiagramm(sec, calcKraft(), " *10^25 Kraft/Teilchen [N]");
 		Druck.updateDiagramm(sec, calcDruckDurchschnitt(), "Druck Durchschnitt[*10^-15 N/m^2]");
 		sec += 1;
 		
@@ -279,7 +284,7 @@ public class MyJfxApp extends Application {
 	 * @return gibt den Druck zu Zeitpunkt t wieder. p(t) = Anzahl der Kollisionen im Zeitschritt * F / 2(H?he * Breite + (Volumen / H?he * Breite) * (H?he + Breite))
 	 */
 	public double calcDruck() {
-		double p =  druckCNT * calcKraft() / (2*(volumen *(paneHight + paneWidth) / (paneHight * paneWidth) * (paneWidth + paneHight)));
+		double p =  druckCNT * (calcKraft() * Math.pow(10,-25)) / (2*(volumen *(paneHight + paneWidth) / (paneHight * paneWidth) * (paneWidth + paneHight)));
 		druckCNT = druckCNT / ZEIT_SCHRITT * Math.pow(10, -3);
 		return p;
 	}
@@ -291,7 +296,7 @@ public class MyJfxApp extends Application {
 	 */
 	public double calcKraft() {
 		double f = (Math.sqrt(calcGeschwindigkeit(0)) * (masse * Math.pow(10, -24)) / ZEIT_SCHRITT * Math.pow(10, -3));
-		return f;
+		return f * Math.pow(10, 25);
 	}
 	
 	/**
@@ -368,7 +373,9 @@ public class MyJfxApp extends Application {
 		final HBox chartPane = new HBox();
 		final VBox vbox = new VBox();
 		final VBox vbox2 = new VBox();
-		
+
+			chartPane.getChildren().removeAll();
+			chartPane.setMaxWidth(screenSize.getWidth() / 2.57);
 		vbox.setStyle("-fx-border-color: black; -fx-boarder-with: 1pt");
 		vbox.getChildren().addAll(
 				Temperatur.createLineChart(),
@@ -379,7 +386,6 @@ public class MyJfxApp extends Application {
 				Kraft.createLineChart(),
 				Druck.createLineChart()
 		);
-		
 		chartPane.getChildren().add(vbox);
 		chartPane.getChildren().add(vbox2);
 		return chartPane;

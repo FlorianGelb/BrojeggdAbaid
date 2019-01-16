@@ -46,7 +46,11 @@ public class UserInterfaceElemente {
 				this.update.getData().clear();
 		}
 	}
-	
+	public void resizeDiagramm(double width, double height)
+	{
+		this.Diagramm.setLayoutX(width);
+		this.Diagramm.setLayoutY(height);
+	}
 	public void destroyDiagramm() {
 		update.getData().clear();
 		Diagramm.getData().clear();
