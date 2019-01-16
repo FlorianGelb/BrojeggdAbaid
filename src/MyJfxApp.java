@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import sun.security.ssl.Debug;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,22 +23,23 @@ public class MyJfxApp extends Application {
 	
 	int anzahl = 10;
 	int sec = 0;
-	int druckCNT = 0;
 	int anzahlT;
 	
 	double temperatur;
 	double rad = 10.0;
 	double masse = 1;
 	double masseT;
-	double speed = 0;
-	double speedSample;
 	double volumen = 1;
 	double volumenT;
 	double druckT = 0;
+	double druckCNT = 0;
 	double velocity = 3;
 	double velocityT;
 	double paneWidth;
 	double paneHight;
+
+	
+	boolean ballIsUpdated = false;
 	
 	UserInterfaceElemente Temperatur = new UserInterfaceElemente();
 	UserInterfaceElemente DruckT = new UserInterfaceElemente();
@@ -76,7 +78,7 @@ public class MyJfxApp extends Application {
 		stage.setScene(scene);
 		stage.setMaximized(true);
 		stage.setResizable(false);
-		stage.setFullScreen(true);
+		stage.setFullScreen(false);
 		stage.setFullScreenExitHint("");
 		
 		borderPane.setRight(createChartPane());
@@ -130,17 +132,24 @@ public class MyJfxApp extends Application {
 	 * Die Methode "addBall" f?gt n B?lle hinzu oder l?scht n B?lle
 	 *
 	 * @param n der Parameter n, des Typs Integer, legt fest, wieviele B?lle hinzugef?gt (falls n gr??er 0) oder  gel?scht (falls n kleiner 0) werden.
+	 * ballIsUpdated Generiert eine Rückmeldung ob die Operation erfolgreich ausgeführt wurde, um Bugs zu vermeiden.
 	 */
 	public void addBall(int n) {
 		if (n < 0) {
-			for (int i = 0; i <= n * -1; i++) {
-				b.remove(i);
+			for (int i = 0; i < n * -1; i++) {
+				b.remove(0);
 			}
+			ballIsUpdated = true;
 		}
-		for (int i = 0; i <= n; i++) {
-			b.add(new Ball(zufall.nextInt(100), zufall.nextInt(100), rad, Color.RED));
+		if( n > 0)
+		{
+			for (int i = 0; i < n; i++) {
+				b.add(new Ball(zufall.nextDouble() * paneWidth , zufall.nextDouble() * paneHight, rad, Color.RED));
+			}
+			ballIsUpdated = true;
+			updateVelocity(velocity);
 		}
-		updateVelocity(velocity);
+		
 	}
 	
 	/**
@@ -214,12 +223,17 @@ public class MyJfxApp extends Application {
 		}
 		if (ButtonChange.returnButtonValue()) {
 			if (anzahl != anzahlT) {
-				timerStop();
-				addBall(anzahlT - anzahl);
-				anzahl = anzahlT;
-				refreshCenterPane();
-				timerStart();
-				ButtonChange.clicked = false;
+				ballIsUpdated = false;
+				if (ballIsUpdated == false)
+				{
+					timerStop();
+					addBall(anzahlT - anzahl);
+					ballIsUpdated = true;
+					anzahl = anzahlT;
+					refreshCenterPane();
+					timerStart();
+					ButtonChange.clicked = false;
+				}
 			}
 			if (masse != masseT) {
 				timerStop();
@@ -240,11 +254,11 @@ public class MyJfxApp extends Application {
 			ButtonChange.clicked = false;
 		}
 		
-		Temperatur.updateDiagramm(sec, calcTemp(), "Temperatur [K]");
-		DruckT.updateDiagramm(sec, druckCNT * calcDruck(), "Druck(t) [N/m^2]");
-		Kraft.updateDiagramm(sec, Math.sqrt(calcGeschwindigkeit()), "Kraft/Teilchen [N]");
-		sec += 1;
+		Temperatur.updateDiagramm(sec, calcTemp(0), "absolute Temperatur [K]");
+		DruckT.updateDiagramm(sec,  calcDruck(), "Druck(t) [N/m^2]");
+		Kraft.updateDiagramm(sec, calcKraft(), "Kraft/Teilchen [N]");
 		Druck.updateDiagramm(sec, calcDruckDurchschnitt(), "Druck Durchschnitt[*10^-15 N/m^2]");
+		sec += 1;
 		
 	}
 	
@@ -254,8 +268,8 @@ public class MyJfxApp extends Application {
 	 * @return gibt den momentanten Durchschnitt des Drucks wieder. p = druck(t) / sec * 10^15
 	 */
 	public double calcDruckDurchschnitt() {
-		druckT += calcDruck();
-		double p = (druckT / sec) * Math.pow(10, 15);
+		druckT = druckT + calcDruck();
+		double p = (druckT / (sec + 1)) * Math.pow(10, 15);
 		return p;
 	}
 	
@@ -265,8 +279,8 @@ public class MyJfxApp extends Application {
 	 * @return gibt den Druck zu Zeitpunkt t wieder. p(t) = Anzahl der Kollisionen im Zeitschritt * F / 2(H?he * Breite + (Volumen / H?he * Breite) * (H?he + Breite))
 	 */
 	public double calcDruck() {
-		double p = calcKraft() / 2 * (paneHight * paneHight + (volumen / paneHight * paneWidth) * (paneHight + paneWidth));
-		druckCNT = 0;
+		double p =  druckCNT * calcKraft() / (2*(volumen *(paneHight + paneWidth) / (paneHight * paneWidth) * (paneWidth + paneHight)));
+		druckCNT = druckCNT / ZEIT_SCHRITT * Math.pow(10, -3);
 		return p;
 	}
 	
@@ -276,17 +290,17 @@ public class MyJfxApp extends Application {
 	 * @return gibt den Betrag der Kraft wieder, die ein einzelnes Teilchen auswirken kann: F = |v| * (Masse / 5ms)
 	 */
 	public double calcKraft() {
-		double f = (Math.sqrt(calcGeschwindigkeit()) * (masse * Math.pow(10, -24)) / ZEIT_SCHRITT * Math.pow(10, -3));
+		double f = (Math.sqrt(calcGeschwindigkeit(0)) * (masse * Math.pow(10, -24)) / ZEIT_SCHRITT * Math.pow(10, -3));
 		return f;
 	}
 	
 	/**
 	 * Die Methode "calcTemp()" errechnet die momentane Temperatur des Gases
 	 *
-	 * @return gibt die Temperatur wieder. T = |v|^2 * (Masse / 2Kb)
+	 * @return gibt die Temperatur wieder. T = |v|^2 * (Masse / 3Kb)
 	 */
-	public double calcTemp() {
-		temperatur = (calcGeschwindigkeit() * masse * Math.pow(10, -24) * 1 / (2 * BOLZTMANN_KONSTANTE));
+	public double calcTemp(int modus) {
+		temperatur = (calcGeschwindigkeit(modus) * (masse * Math.pow(10, -24)) * 1 / (3 * BOLZTMANN_KONSTANTE));
 		return temperatur;
 	}
 	
@@ -294,14 +308,19 @@ public class MyJfxApp extends Application {
 	 * Die Methode "calcGeschwindigkeit()" errechnet den durchschnittlichen betrag der Geschwindigkeitsvektoren vx und vy
 	 *
 	 * @return gibt |v|^2 wieder: |v|^2 = (vx[n]^2 + vy[n]^2) / Anzahl der Partikel; n hat kann die Werte [0;Anzahl der Partikel[ annehmen.
+	 * @param modus Wenn modus = 0, Durchschnitsgeschwindigkeit wird zurückgegeben, wenn modus != 0, wird die Summe aller Beträge zurückgegeben
 	 */
-	public double calcGeschwindigkeit() {
-		speedSample = speed;
+	public double calcGeschwindigkeit(int modus) {
+		double speed = 0;
 		for (Ball e : b) {
 			speed += (e.vx) * (e.vx) + (e.vy) * (e.vy);
 			
 		}
-		speed = (speed) / b.size();
+		if (modus == 0)
+		{
+			speed = (speed) / b.size();
+		}
+		
 		return speed;
 	}
 	
