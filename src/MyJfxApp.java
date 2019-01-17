@@ -81,20 +81,15 @@ public class MyJfxApp extends Application {
 		stage.setFullScreen(true);
 		stage.setFullScreenExitHint("");
 		
-		System.out.println(screenSize.getWidth());
-		
 		borderPane.setRight(createChartPane());
 		borderPane.setCenter(createCenterPane());
 		borderPane.setLeft(createSettingsPane());
-
 		
 		stage.show();
 		
 		paneHight = borderPane.getCenter().getBoundsInLocal().getHeight() - 10;
 		paneWidth = borderPane.getCenter().getBoundsInLocal().getWidth() - 30;
 		
-		
-		System.out.print(paneWidth);
 		startSimulation();
 	}
 	
@@ -217,11 +212,15 @@ public class MyJfxApp extends Application {
 	 * zu Aktuallisieren.
 	 */
 	public void updateUI() {
-		anzahlT = Integer.parseInt(Anzahl.returnText());
-		masseT = Double.parseDouble(Masse.returnText());
-		velocityT = Double.parseDouble(Geschwindigkeit.returnText());
-		volumenT = Double.parseDouble(Volumen.returnText());
-		
+			try
+			{
+				anzahlT = Integer.parseInt(Anzahl.returnText());
+				masseT = Double.parseDouble(Masse.returnText());
+				velocityT = Double.parseDouble(Geschwindigkeit.returnText());
+				volumenT = Double.parseDouble(Volumen.returnText());
+			}
+			catch (java.lang.NumberFormatException e) {}
+	
 		if (ButtonExit.returnButtonValue()) {
 			Window stage = scene.getWindow();
 			stage.hide();
