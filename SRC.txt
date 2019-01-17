@@ -1,0 +1,8 @@
+https://docs.oracle.com/javafx/2/ui_controls/slider.htm 26.12.18
+https://stackoverflow.com/questions/30160899/value-change-listener-for-javafxs-textfield 3.1.19
+http://aristatait.tistory.com/38 4.1.19
+https://stackoverflow.com/questions/8293774/set-caret-position-in-javafx-scene-control-textarea-and-javafx-scene-control-tex 4.1.19
+https://docs.oracle.com/javafx/2/charts/jfxpub-charts.htm 8.1.2019
+https://panjutorials.de/tutorials/javafx-8-gui/lektionen/line-chart-in-javafx/ 9.1.18
+https://stackoverflow.com/questions/25037724/how-to-close-a-java-window-with-a-button-click-javafx-project/25038465#25038465 12.1.19
+https://alvinalexander.com/blog/post/jfc-swing/how-determine-get-screen-size-java-swing-app 16.1.19
